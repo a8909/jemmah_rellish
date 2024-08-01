@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/practical/Login.dart';
 
 class Insta extends StatefulWidget {
   const Insta({super.key});
@@ -23,9 +22,9 @@ class _InstaState extends State<Insta> {
               onSelected: (value) {
                 switch (value) {
                   case Option.edit:
-                    print('Edit');
                   case Option.log:
-                    print('Log out');
+                  default:
+                    print('No value found');
                     // TODO: Handle this case.
                     break;
                 }
@@ -36,9 +35,28 @@ class _InstaState extends State<Insta> {
                     value: Option.edit,
                     child: Text('Edit'),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: Option.log,
-                    child: Text('Log out'),
+                    child: const Text('Log out'),
+                    onTap: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(''),
+                            content: const Text(
+                                "Are you sure you want to log out ?"),
+                            actions: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, 'Log out');
+                                    },
+                                    child: const Text('Log out')),
+                              )
+                            ],
+                          );
+                        }),
                   )
                 ];
               },

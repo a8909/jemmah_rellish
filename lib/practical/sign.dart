@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/components/Server.dart';
 
 class Signup extends StatefulWidget {
   Signup({super.key});

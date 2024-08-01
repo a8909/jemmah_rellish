@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/Server.dart';
+import 'package:jemmah_rellish/practical/screens.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -7,10 +9,35 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
+final services = ServiceWorker();
+
 class _LoginState extends State<Login> {
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _pwdController = TextEditingController();
   bool visiblle = true;
   bool box = true;
+  bool isLoggedIn = true;
+  bool status = false;
+  String errorMessage = '';
+  String password = '';
+
+  isLoading() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          content: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
+
+  switchMode() {
+    isLoggedIn = !isLoggedIn;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +81,19 @@ class _LoginState extends State<Login> {
               height: 10,
             ),
             TextField(
+              controller: _pwdController,
               textCapitalization: TextCapitalization.sentences,
               obscureText: visiblle,
+              onChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
               decoration: InputDecoration(
                   focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blueAccent)),
                   enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: Color(0xFFC2BEBE)),
                   ),
                   suffixIcon: IconButton(
                       onPressed: () {
@@ -95,9 +128,18 @@ class _LoginState extends State<Login> {
                 const Spacer(),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/SignUp');
+                      final body = {
+                        'email': _controller.text,
+                        'password': _pwdController.text
+                      };
+                      services.signUP(body);
+                      _controller.clear();
+                      _pwdController.clear();
+                      // Navigator.of(context).pushNamed('/SignUp');
                     },
-                    child: const Text('Sign up'))
+                    child: isLoggedIn
+                        ? const Text('Sign up')
+                        : const Text('Login'))
               ],
             ),
             const SizedBox(
@@ -107,12 +149,29 @@ class _LoginState extends State<Login> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/screens');
-                  },
+                  onPressed: _controller.text.isEmpty || password.isEmpty
+                      ? null
+                      : () {
+                          final body = {
+                            'email': _controller.text,
+                            'password': _pwdController.text
+                          };
+                          services.userLogin(body);
+                          status = true;
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) {
+                              return const Screens();
+                            },
+                          ));
+                          _controller.clear();
+                          _pwdController.clear();
+                        },
                   style: ElevatedButton.styleFrom(),
-                  child: const Text('Login')),
+                  child: status ? const Text('Login') : const Text('Sign up')),
             ),
+
+            // errorMessage should be displayed here
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/Password');

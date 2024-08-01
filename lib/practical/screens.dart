@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/main.dart';
-import 'package:jemmah_rellish/practical/instagram.dart';
+import 'package:jemmah_rellish/practical/profile.dart';
 import 'package:jemmah_rellish/practical/post.dart';
 
 class Screens extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/components/Server.dart';
 
 class Posts extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();

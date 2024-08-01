@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light(),
-
-      //  theme ? ThemeData.dark() : ThemeData.light(),
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
         '/': (context) => const Login(),
@@ -273,7 +273,7 @@ Future<Map<String, dynamic>> getData() async {
       print(svr_response.body);
     }
   } catch (e) {
-    log('An error occured');
+    log('$e');
   }
   return result;
 }
