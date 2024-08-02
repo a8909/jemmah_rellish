@@ -82,3 +82,15 @@ class MybottomNavigator extends StatelessWidget {
     );
   }
 }
+
+
+// BottomNavigationBarItem (){
+//   return  BottomNavigationBarItem(
+//             icon: IconButton(
+//                 onPressed: () => onTap(Menus.chat),
+//                 icon: const Icon(Icons.chat_sharp),
+//                 color: currentIndex == Menus.chat
+//                     ? Colors.black
+//                     : Colors.black.withOpacity(0.3)),
+//             label: 'me')
+// }

@@ -157,6 +157,16 @@ class _LoginState extends State<Login> {
                             'password': _pwdController.text
                           };
                           services.userLogin(body);
+                          // if (result['error']['message']) {
+                          //   print('error>>>>>');
+                          //   switch (result['error']['message']) {
+                          //     case 'INVALID_LOGIN_CREDENTIALS':
+                          //       errorMessage = 'Invalid login credentials';
+                          //       break;
+                          //     default:
+                          //       errorMessage = 'An error occurred';
+                          //   }
+                          // }
                           status = true;
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
@@ -167,19 +177,26 @@ class _LoginState extends State<Login> {
                           _controller.clear();
                           _pwdController.clear();
                         },
-                  style: ElevatedButton.styleFrom(),
-                  child: status ? const Text('Login') : const Text('Sign up')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF103B11),
+                      disabledBackgroundColor:
+                          const Color(0xFF103B11).withOpacity(0.5)),
+                  child: status ? const Text('...') : const Text('Login')),
             ),
+            errorMessage == '' ? const Text('') : Text(errorMessage),
 
             // errorMessage should be displayed here
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/Password');
-                },
-                child: const Text(
-                  'Forget password',
-                  style: TextStyle(color: Colors.red),
-                ))
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/Password');
+                  },
+                  child: const Text(
+                    'Forget password',
+                    // style: TextStyle(color: Colors.red),
+                  )),
+            )
           ],
         ),
       ),

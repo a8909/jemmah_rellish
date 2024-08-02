@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:http/http.dart';
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/Server.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/Forgotpass.dart';
 import 'package:jemmah_rellish/practical/Login.dart';
 import 'package:jemmah_rellish/practical/notification.dart';
@@ -19,14 +21,17 @@ void main() {
 class MyApp extends StatelessWidget {
   bool theme = true;
   MyApp({super.key});
+  final songTheme = SongModel();
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(),
+      theme: ThemeData(useMaterial3: true),
+      darkTheme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
+      themeMode: songTheme.theme(),
       initialRoute: '/',
       routes: {
         '/': (context) => const Login(),
@@ -92,6 +97,18 @@ class _JehmaState extends State<Jehma> {
     '#2000',
     '#1000',
   ];
+  final service = ServiceWorker();
+
+  @override
+  void initState() {
+    super.initState();
+    // if (Localstorage().updating('auth')) {
+    //   print('storage is present');
+    //   Localstorage().updating('auth');
+    // } else {
+    //   print('no such instance is found');
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +153,7 @@ class _JehmaState extends State<Jehma> {
             ),
             Expanded(
               child: FutureBuilder(
-                  future: getData(),
+                  future: service.getData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
@@ -204,17 +221,21 @@ class _JehmaState extends State<Jehma> {
 _Items(String images, String recepie, String price) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          backgroundImage: AssetImage(images),
-          radius: 20,
-        ),
-        Text(recepie),
-        const Spacer(),
-        Text(price)
-      ],
+    child: Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            backgroundImage: AssetImage(images),
+            radius: 20,
+          ),
+          Text(recepie),
+          const Spacer(),
+          Text(price)
+        ],
+      ),
     ),
   );
 }
@@ -259,21 +280,4 @@ Padding sideshow(String editors, String title, String content, String author) {
       ),
     ),
   );
-}
-
-Future<Map<String, dynamic>> getData() async {
-  Map<String, dynamic> result = {};
-  try {
-    String url = "http://127.0.0.1:5000/data_yen";
-    Response svr_response = await post(Uri.parse(url));
-    print('me');
-    if (svr_response.statusCode == 200) {
-      result = json.decode(svr_response.body);
-    } else {
-      print(svr_response.body);
-    }
-  } catch (e) {
-    log('$e');
-  }
-  return result;
 }

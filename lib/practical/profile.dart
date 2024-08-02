@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/songsModel.dart';
 
 class Insta extends StatefulWidget {
   const Insta({super.key});
@@ -9,8 +11,9 @@ class Insta extends StatefulWidget {
 
 class _InstaState extends State<Insta> {
   List<String> gender = ['Male', 'Female'];
-  bool state = true;
+  bool state = false;
   String dropdownValue = 'Male';
+  final songTheme = SongModel();
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +53,26 @@ class _InstaState extends State<Insta> {
                                 alignment: Alignment.center,
                                 child: OutlinedButton(
                                     onPressed: () {
-                                      Navigator.pop(context, 'Log out');
+                                      Localstorage().delete('auth');
+                                      Navigator.pop(context);
+                                      state = true;
                                     },
                                     child: const Text('Log out')),
                               )
                             ],
                           );
                         }),
-                  )
+                  ),
+                  PopupMenuItem(
+                    value: Option.mode,
+                    child: Text('Mode'),
+                    onTap: () {
+                      print('darkmode');
+                      setState(() {
+                        songTheme.lightMode != songTheme.lightMode;
+                      });
+                    },
+                  ),
                 ];
               },
             )
@@ -178,7 +193,7 @@ class _InstaState extends State<Insta> {
   }
 }
 
-enum Option { edit, log }
+enum Option { edit, log, mode }
 
 Container details(String key, String value) {
   return Container(
