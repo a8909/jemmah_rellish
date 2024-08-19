@@ -25,7 +25,9 @@ class _InstaState extends State<Insta> {
               onSelected: (value) {
                 switch (value) {
                   case Option.edit:
+                    break;
                   case Option.log:
+                    break;
                   default:
                     print('No value found');
                     // TODO: Handle this case.
@@ -65,11 +67,10 @@ class _InstaState extends State<Insta> {
                   ),
                   PopupMenuItem(
                     value: Option.mode,
-                    child: Text('Mode'),
+                    child: const Text('Mode'),
                     onTap: () {
-                      print('darkmode');
                       setState(() {
-                        songTheme.lightMode != songTheme.lightMode;
+                        songTheme.lightMode = !songTheme.lightMode;
                       });
                     },
                   ),

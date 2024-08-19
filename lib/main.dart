@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/Server.dart';
-import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/Forgotpass.dart';
 import 'package:jemmah_rellish/practical/Login.dart';
@@ -19,7 +18,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  bool theme = true;
   MyApp({super.key});
   final songTheme = SongModel();
 
@@ -28,10 +26,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      darkTheme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
+      theme: songTheme.lightMode ? ThemeData.light() : ThemeData.dark(),
+      themeMode: songTheme.lightMode ? ThemeMode.light : ThemeMode.dark,
+      // darkTheme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
-      themeMode: songTheme.theme(),
       initialRoute: '/',
       routes: {
         '/': (context) => const Login(),
@@ -174,46 +172,6 @@ class _JehmaState extends State<Jehma> {
           ],
         ),
       ),
-
-//       // Padding(
-//       //   padding: const EdgeInsets.all(20.0),
-//       //   child: Column(
-//       //     crossAxisAlignment: CrossAxisAlignment.start,
-//       //     children: [
-//       //       const Text(
-//       //         'Recepies of the Day',
-//       //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-//       //       ),
-//       //       sideshow(),
-//       //       const Text(
-//       //         'Social Chefs',
-//       //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//       //       ),
-//       //       FutureBuilder(
-//       //         future: getData(),
-//       //         builder: (context, snapshot) {
-//       //           if (snapshot.connectionState == ConnectionState.active) {
-//       //             return ListView.builder(
-//       //               itemCount: user.length,
-//       //               itemBuilder: (context, index) {
-//       //                 final product = user[index];
-//       //                 return ListTile(
-//       //                   leading: Image.asset(''),
-//       //                   title: Text(product),
-//       //                   subtitle: Text(amount[index]),
-//       //                 );
-//       //               },
-//       //             );
-//       //           } else {
-//       //             return const Center(
-//       //               child: CircularProgressIndicator(),
-//       //             );
-//       //           }
-//       //         },
-//       //       )
-//       //     ],
-//       //   ),
-//       // ),
     );
   }
 }

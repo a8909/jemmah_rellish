@@ -32,7 +32,8 @@ class ServiceWorker {
     // var result =
 
     try {
-      Localstorage().create('auth', response.body);
+      await Localstorage().create('auth', response.body);
+
       return response.statusCode == 200
           ? jsonDecode(response.body)
           : 'Request failed!';

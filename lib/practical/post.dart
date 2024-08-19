@@ -1,8 +1,30 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class Posts extends StatelessWidget {
-  final TextEditingController _controller = TextEditingController();
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+class Posts extends StatefulWidget {
   Posts({super.key});
+
+  @override
+  State<Posts> createState() => _PostsState();
+}
+
+class _PostsState extends State<Posts> {
+  final TextEditingController _controller = TextEditingController();
+
+  File? _img;
+  bool displayImage = false;
+
+  final picker = ImagePicker();
+
+  Future uploadFromGallery() async {
+    final pickerFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickerFile == null) return;
+      _img = File(pickerFile.path);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +83,22 @@ class Posts extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                      Container(
-                        height: 200,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(16)),
-                            border: Border.all(color: Colors.black)),
-                        child: const Center(
-                          child: Text('Upload fron gallery'),
-                        ),
-                      ),
+                      displayImage
+                          ? const Text('image has been loaded..')
+                          : GestureDetector(
+                              onTap: () => uploadFromGallery(),
+                              child: Container(
+                                height: 200,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16)),
+                                    border: Border.all(color: Colors.black)),
+                                child: const Center(
+                                  child: Text('Upload fron gallery'),
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         height: 16,
                       ),

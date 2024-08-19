@@ -156,26 +156,26 @@ class _LoginState extends State<Login> {
                             'email': _controller.text,
                             'password': _pwdController.text
                           };
-                          services.userLogin(body);
-                          // if (result['error']['message']) {
-                          //   print('error>>>>>');
-                          //   switch (result['error']['message']) {
-                          //     case 'INVALID_LOGIN_CREDENTIALS':
-                          //       errorMessage = 'Invalid login credentials';
-                          //       break;
-                          //     default:
-                          //       errorMessage = 'An error occurred';
-                          //   }
-                          // }
-                          status = true;
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) {
-                              return const Screens();
-                            },
-                          ));
-                          _controller.clear();
-                          _pwdController.clear();
+                          // services.userLogin(body);
+
+                          services.userLogin(body).then((value) {
+                            status = true;
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) {
+                                return const Screens();
+                              },
+                            ));
+                            _controller.clear();
+                            _pwdController.clear();
+                          }).catchError((onError) {
+                            if (onError) {
+                              errorMessage = Text('Error: $onError') as String;
+                              print(errorMessage);
+                            }
+
+                            return onError;
+                          });
                         },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF103B11),

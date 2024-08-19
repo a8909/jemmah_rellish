@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/main.dart';
-import 'package:jemmah_rellish/practical/profile.dart';
 import 'package:jemmah_rellish/practical/post.dart';
+import 'package:jemmah_rellish/practical/profile.dart';
+// import 'package:jemmah_rellish/practical/song.dart';
 
 class Screens extends StatefulWidget {
   const Screens({super.key});
@@ -11,6 +12,13 @@ class Screens extends StatefulWidget {
 }
 
 class _ScreensState extends State<Screens> {
+  @override
+  void initState() {
+    super.initState();
+
+    print('user has loggee in');
+  }
+
   Menus currentIndex = Menus.home;
   @override
   Widget build(BuildContext context) {
@@ -31,12 +39,13 @@ enum Menus {
   home,
   add,
   chat,
+  // music
 }
 
 final pages = [
-  const Jehma(),
-  Posts(),
+  const Jehma(), Posts(),
   const Insta(),
+  // Song()
 ];
 
 class MybottomNavigator extends StatelessWidget {
@@ -74,7 +83,15 @@ class MybottomNavigator extends StatelessWidget {
                 color: currentIndex == Menus.chat
                     ? Colors.black
                     : Colors.black.withOpacity(0.3)),
-            label: 'me'),
+            label: 'me')
+        //     BottomNavigationBarItem(
+        //         icon: IconButton(
+        //             onPressed: () => onTap(Menus.music),
+        //             icon: const Icon(Icons.music_note),
+        //             color: currentIndex == Menus.music
+        //                 ? Colors.black
+        //                 : Colors.black.withOpacity(0.3)),
+        //         label: 'music'),
       ],
       showSelectedLabels: false,
       showUnselectedLabels: false,
@@ -82,15 +99,3 @@ class MybottomNavigator extends StatelessWidget {
     );
   }
 }
-
-
-// BottomNavigationBarItem (){
-//   return  BottomNavigationBarItem(
-//             icon: IconButton(
-//                 onPressed: () => onTap(Menus.chat),
-//                 icon: const Icon(Icons.chat_sharp),
-//                 color: currentIndex == Menus.chat
-//                     ? Colors.black
-//                     : Colors.black.withOpacity(0.3)),
-//             label: 'me')
-// }
