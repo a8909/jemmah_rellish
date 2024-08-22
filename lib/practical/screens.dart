@@ -38,7 +38,7 @@ class _ScreensState extends State<Screens> {
 enum Menus {
   home,
   add,
-  chat,
+  profile,
   // music
 }
 
@@ -78,9 +78,9 @@ class MybottomNavigator extends StatelessWidget {
             label: 'add'),
         BottomNavigationBarItem(
             icon: IconButton(
-                onPressed: () => onTap(Menus.chat),
-                icon: const Icon(Icons.chat_sharp),
-                color: currentIndex == Menus.chat
+                onPressed: () => onTap(Menus.profile),
+                icon: const Icon(Icons.person_2_outlined),
+                color: currentIndex == Menus.profile
                     ? Colors.black
                     : Colors.black.withOpacity(0.3)),
             label: 'me')

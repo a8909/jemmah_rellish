@@ -1,18 +1,30 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Localstorage {
-  Future create(String key, String value) async {
+  Future create({required String key, required String value}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(key, value);
+
+    bool isCreate = await prefs.setString(key, value);
+    print(isCreate);
   }
 
-  Future updating(String key) async {
+  updating(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }
 
-  Future delete(String key) async {
+  delete(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
+  }
+
+  postUpdate(String key, value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setStringList(key, value);
+  }
+
+  getPost(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(key);
   }
 }

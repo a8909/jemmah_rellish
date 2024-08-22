@@ -2,6 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jemmah_rellish/components/allPost.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/userPost.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../components/models/postArray.dart';
 
 class Posts extends StatefulWidget {
   Posts({super.key});
@@ -13,17 +19,43 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> {
   final TextEditingController _controller = TextEditingController();
 
-  File? _img;
+  File? img;
   bool displayImage = false;
 
   final picker = ImagePicker();
+  final postArray = Reviews();
+  final Localstorage _storage = Localstorage();
 
   Future uploadFromGallery() async {
     final pickerFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickerFile == null) return;
-      _img = File(pickerFile.path);
+      img = File(pickerFile.path);
+      displayImage = true;
     });
+  }
+
+  onCreatePost() {
+    UsrPost _postRev = UsrPost(
+        img: 'assets/image/kkki.png',
+        name: 'Jacob Brilliant',
+        comment: _controller.text);
+    print(_postRev);
+    // _storage.postUpdate('pst', _postRev);
+    postArray.userPost.add(_postRev);
+  }
+
+  void _dataBase() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('pst')) {
+      _storage.getPost('pst');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _dataBase();
   }
 
   @override
@@ -44,7 +76,7 @@ class _PostsState extends State<Posts> {
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24))),
                 child: Padding(
-                  padding: EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -84,7 +116,12 @@ class _PostsState extends State<Posts> {
                         height: 16,
                       ),
                       displayImage
-                          ? const Text('image has been loaded..')
+                          ? Image.file(
+                              img!,
+                              fit: BoxFit.cover,
+                              width: 160,
+                              height: 160,
+                            )
                           : GestureDetector(
                               onTap: () => uploadFromGallery(),
                               child: Container(
@@ -112,7 +149,13 @@ class _PostsState extends State<Posts> {
                         height: 16,
                       ),
                       ElevatedButton(
-                          onPressed: () {}, child: const Text('Create post'))
+                          onPressed: () {
+                            onCreatePost();
+                            _controller.clear();
+                            displayImage = false;
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Create post'))
                     ],
                   ),
                 ),
@@ -121,58 +164,47 @@ class _PostsState extends State<Posts> {
           );
         },
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.location_on_sharp)),
-                const Text(
-                  'Posts',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/Notify');
-                    },
-                    icon: const Icon(Icons.notifications))
-              ],
-            ),
-            const Divider(
-              height: 30,
-            ),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/image/HE-1114.png',
-                  height: 40,
-                  width: 40,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                const Text('Boluwatife Shobola')
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Image.asset(
-              'assets/image/HE-1114.png',
-              height: 200,
-              width: double.infinity,
-            ),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Coding is fun, i really enjoyed it..... '))
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.location_on_sharp)),
+                  const Text(
+                    'Posts',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/Notify');
+                      },
+                      icon: const Icon(Icons.notifications))
+                ],
+              ),
+              const Divider(
+                height: 30,
+              ),
+              postArray.userPost.isNotEmpty
+                  ? ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return AllPost(usp: postArray.singlePost[index]);
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 30,
+                          ),
+                      itemCount: postArray.userPost.length)
+                  : const Text('')
+            ],
+          ),
         ),
       ),
     );

@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/components/Server.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
 import 'package:jemmah_rellish/practical/Forgotpass.dart';
-import 'package:jemmah_rellish/practical/Login.dart';
+import 'package:jemmah_rellish/practical/login.dart';
 import 'package:jemmah_rellish/practical/notification.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:jemmah_rellish/practical/sign.dart';
 // import 'package:jemmah_rellish/practical/explore.dart';
 
-import 'practical/Globalstring.dart';
+import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
 void main() {
@@ -26,13 +28,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: songTheme.lightMode ? ThemeData.light() : ThemeData.dark(),
-      themeMode: songTheme.lightMode ? ThemeMode.light : ThemeMode.dark,
+      theme: songTheme.displayTheme(),
       // darkTheme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const Login(),
+        // login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
         pswrd: (context) => Forgot(),
@@ -96,10 +98,37 @@ class _JehmaState extends State<Jehma> {
     '#1000',
   ];
   final service = ServiceWorker();
+  int sliderCounter = 0;
+  void _slider() async {
+    await Future.delayed(
+        const Duration(seconds: 3000),
+        () => {
+              if (sliderCounter == editor.length)
+                {sliderCounter = 0}
+              else
+                {
+                  sliderCounter++,
+                  Expanded(
+                      child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: title.length,
+                    itemBuilder: (context, index) {
+                      return sideshow(editor[index], title[index],
+                          content[index], authors[index]);
+                    },
+                  )),
+                }
+            });
+  }
 
+  final Localstorage localstorage = Localstorage();
   @override
   void initState() {
     super.initState();
+    _slider();
+    var auth = localstorage.updating('auth');
+
+    // print(auth);
     // if (Localstorage().updating('auth')) {
     //   print('storage is present');
     //   Localstorage().updating('auth');
@@ -136,12 +165,16 @@ class _JehmaState extends State<Jehma> {
             Expanded(
                 child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
               itemCount: title.length,
               itemBuilder: (context, index) {
                 return sideshow(editor[index], title[index], content[index],
                     authors[index]);
               },
             )),
+            const SizedBox(
+              height: 10,
+            ),
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
@@ -200,7 +233,7 @@ _Items(String images, String recepie, String price) {
 
 Padding sideshow(String editors, String title, String content, String author) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
     child: Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -208,8 +241,8 @@ Padding sideshow(String editors, String title, String content, String author) {
           boxShadow: [
             BoxShadow(blurRadius: 6, color: Colors.grey, offset: Offset(1, 2))
           ]),
-      height: 200,
-      width: 200,
+      height: 400,
+      width: 280,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -220,9 +253,12 @@ Padding sideshow(String editors, String title, String content, String author) {
               title,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Image.asset('assets/image/HE-1114.png',
-                height: 50, width: double.infinity),
+            Image.asset(
+              'assets/image/HE-1114.png',
+              height: 50,
+            ),
             const Spacer(),
+            // const SizedBox(height: 15),
             Align(alignment: Alignment.bottomRight, child: Text(content)),
             Align(
               alignment: Alignment.bottomRight,

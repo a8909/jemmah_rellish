@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:jemmah_rellish/components/localStorage.dart';
 
 class ServiceWorker {
+  String err = '';
   Future<Map<String, dynamic>> signUP(body) async {
     var endPoint =
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
@@ -28,19 +29,27 @@ class ServiceWorker {
     var endPoint =
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
     var response = await http.post(Uri.parse(endPoint), body: jsonEncode(body));
-    print(response.body);
-    // var result =
+    print(response.bodyBytes);
 
     try {
-      await Localstorage().create('auth', response.body);
+      //  Localstorage().create(key: 'auth', value: token["kind"]);
 
       return response.statusCode == 200
           ? jsonDecode(response.body)
           : 'Request failed!';
     } catch (e) {
-      print('>>>');
+      switch (e) {
+        case 'INVALID_PASSWORD':
+          err = 'invalid password';
+          break;
+        case 'EMAIL_EXITS':
+          err = 'email already exist';
+          break;
+        default:
+          err = 'An error occurred';
+      }
       print(e);
-      throw Exception(e);
+      return throw Exception(e);
     }
   }
 

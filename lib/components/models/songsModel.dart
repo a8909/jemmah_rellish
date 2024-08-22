@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/playSong.dart';
 
 class SongModel {
@@ -29,4 +30,10 @@ class SongModel {
   }
 
   bool lightMode = true;
+
+  displayTheme() {
+    _mode ? ThemeData.dark() : ThemeData.light();
+  }
+
+  get _mode => lightMode;
 }
