@@ -4,13 +4,12 @@ class Localstorage {
   Future create({required String key, required String value}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    bool isCreate = await prefs.setString(key, value);
-    print(isCreate);
+    await prefs.setString(key, value);
   }
 
-  updating(String key) async {
+  updating({required String key}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
+    prefs.getString(key);
   }
 
   delete(String key) async {
@@ -18,13 +17,15 @@ class Localstorage {
     return prefs.remove(key);
   }
 
-  postUpdate(String key, value) async {
+  Future<Future<bool>> postUpdate(String key, value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setStringList(key, value);
+    final upd = prefs.setStringList(key, value);
+    return upd;
   }
 
-  getPost(String key) async {
+  Future<List<String>?> getPost(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(key);
+    final keys = prefs.getStringList(key);
+    return keys;
   }
 }

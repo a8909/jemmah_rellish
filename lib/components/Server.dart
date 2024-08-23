@@ -29,10 +29,9 @@ class ServiceWorker {
     var endPoint =
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
     var response = await http.post(Uri.parse(endPoint), body: jsonEncode(body));
-    print(response.bodyBytes);
 
     try {
-      //  Localstorage().create(key: 'auth', value: token["kind"]);
+      Localstorage().create(key: 'auth', value: response.body);
 
       return response.statusCode == 200
           ? jsonDecode(response.body)

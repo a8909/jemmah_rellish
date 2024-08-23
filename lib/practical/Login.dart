@@ -22,18 +22,6 @@ class _LoginState extends State<Login> {
   String password = '';
   bool stateChecker = false;
 
-  void _stateSetter(bool value) {
-    setState(() {
-      status = value;
-    });
-  }
-
-  void _states(value) {
-    setState(() {
-      stateChecker = !value;
-    });
-  }
-
   isLoading() {
     return showDialog(
       context: context,
@@ -110,7 +98,9 @@ class _LoginState extends State<Login> {
                       ),
                       suffixIcon: IconButton(
                           onPressed: () {
-                            visiblle = !visiblle;
+                            setState(() {
+                              visiblle = !visiblle;
+                            });
                           },
                           icon: visiblle
                               ? const Icon(Icons.visibility_sharp)
@@ -125,7 +115,9 @@ class _LoginState extends State<Login> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          box = !box;
+                          setState(() {
+                            box = !box;
+                          });
                         },
                         icon: box
                             ? const Icon(
@@ -169,7 +161,9 @@ class _LoginState extends State<Login> {
                               };
 
                               services.userLogin(body);
-                              _stateSetter(true);
+                              setState(() {
+                                status = true;
+                              });
 
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
@@ -179,14 +173,16 @@ class _LoginState extends State<Login> {
                               ));
                               _controller.clear();
                               _pwdController.clear();
-                              _stateSetter(false);
+                              setState(() {
+                                status = false;
+                              });
                             },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF103B11),
                           disabledBackgroundColor:
                               const Color(0xFF103B11).withOpacity(0.5)),
-                      child: status
-                          ? const Text('...')
+                      child: status == true
+                          ? const Text('checking')
                           : const Text(
                               'Login',
                               style: TextStyle(color: Colors.white),

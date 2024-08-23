@@ -19,7 +19,6 @@ class _SplashState extends State<Splash> {
     await Future.delayed(
         const Duration(seconds: 2000),
         () => {
-              print('welcome  to jemah'),
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

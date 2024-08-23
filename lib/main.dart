@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
-import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
-import 'package:jemmah_rellish/practical/Forgotpass.dart';
+// import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
+import 'package:jemmah_rellish/practical/forgotpass.dart';
 import 'package:jemmah_rellish/practical/login.dart';
 import 'package:jemmah_rellish/practical/notification.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:jemmah_rellish/practical/sign.dart';
 // import 'package:jemmah_rellish/practical/explore.dart';
 
+import 'practical/cartList.dart';
 import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         pswrd: (context) => Forgot(),
         notifi: (context) => const Not(),
         sign: (context) => Signup(),
+        'carts': (context) => const CartList(),
       },
     );
   }
@@ -126,15 +128,8 @@ class _JehmaState extends State<Jehma> {
   void initState() {
     super.initState();
     _slider();
-    var auth = localstorage.updating('auth');
-
-    // print(auth);
-    // if (Localstorage().updating('auth')) {
-    //   print('storage is present');
-    //   Localstorage().updating('auth');
-    // } else {
-    //   print('no such instance is found');
-    // }
+    var auth = localstorage.updating(key: 'auth');
+    print(auth);
   }
 
   @override

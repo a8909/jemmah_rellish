@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../components/models/postArray.dart';
 
 class Posts extends StatefulWidget {
-  Posts({super.key});
+  const Posts({super.key});
 
   @override
   State<Posts> createState() => _PostsState();
@@ -20,6 +20,7 @@ class _PostsState extends State<Posts> {
   final TextEditingController _controller = TextEditingController();
 
   File? img;
+  String _sngImg = "";
   bool displayImage = false;
 
   final picker = ImagePicker();
@@ -31,23 +32,27 @@ class _PostsState extends State<Posts> {
     setState(() {
       if (pickerFile == null) return;
       img = File(pickerFile.path);
+      _sngImg = pickerFile.path;
       displayImage = true;
     });
   }
 
   onCreatePost() {
-    UsrPost _postRev = UsrPost(
-        img: 'assets/image/kkki.png',
-        name: 'Jacob Brilliant',
-        comment: _controller.text);
-    print(_postRev);
-    // _storage.postUpdate('pst', _postRev);
-    postArray.userPost.add(_postRev);
+    UsrPost postRev = UsrPost(
+        img: _sngImg, name: 'Jacob Brilliant', comment: _controller.text);
+    setState(() {
+      postArray.userPost.add(postRev);
+      _storage.getPost('pst');
+    });
+    print(postRev);
+    _controller.clear();
+    displayImage = false;
+    Navigator.pop(context);
   }
 
-  void _dataBase() async {
+  void _getReviews() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('pst')) {
+    if (prefs.containsKey('pst') && postArray.userPost.isNotEmpty) {
       _storage.getPost('pst');
     }
   }
@@ -55,7 +60,7 @@ class _PostsState extends State<Posts> {
   @override
   void initState() {
     super.initState();
-    _dataBase();
+    _getReviews();
   }
 
   @override
@@ -151,9 +156,6 @@ class _PostsState extends State<Posts> {
                       ElevatedButton(
                           onPressed: () {
                             onCreatePost();
-                            _controller.clear();
-                            displayImage = false;
-                            Navigator.pop(context);
                           },
                           child: const Text('Create post'))
                     ],
@@ -192,17 +194,15 @@ class _PostsState extends State<Posts> {
               const Divider(
                 height: 30,
               ),
-              postArray.userPost.isNotEmpty
-                  ? ListView.separated(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return AllPost(usp: postArray.singlePost[index]);
-                      },
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 30,
-                          ),
-                      itemCount: postArray.userPost.length)
-                  : const Text('')
+              ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return AllPost(usp: postArray.singlePost[index]);
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(
+                        height: 10,
+                      ),
+                  itemCount: postArray.userPost.length)
             ],
           ),
         ),

@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/models/cartItems.dart';
+import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/practical/cartList.dart';
+import 'package:jemmah_rellish/practical/diisplayCart.dart';
+
+class Cartlogues extends StatefulWidget {
+  const Cartlogues({super.key});
+
+  @override
+  State<Cartlogues> createState() => _CartloguesState();
+}
+
+class _CartloguesState extends State<Cartlogues> {
+  final clr = SongModel();
+
+  CartItems crt = CartItems();
+  bool isCartAdded = false;
+  int cartCount = 0;
+  get _itemcount => cartCount;
+
+  void addToCart(index) {
+    setState(() {
+      isCartAdded = true;
+      cartCount + 1;
+      var addItems = crt.categories[index];
+      crt.onAdd(addItems);
+      print(crt.shopCart);
+    });
+  }
+
+  void showCart() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) {
+        return const CartList();
+      },
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: clr.light.primaryColor,
+          foregroundColor: Colors.white,
+          elevation: 1,
+          leading: IconButton(
+            onPressed: () {
+              showCart();
+            },
+            icon: const Icon(Icons.trolley),
+            tooltip: _itemcount.toString(),
+          ),
+          title: const Center(child: Text('C A T L O G U E S'))),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            const Row(
+              children: [
+                Text(
+                  'Welcome',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
+                Text('to jehmma rellish big store...')
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: crt.categories.length,
+                itemBuilder: (context, index) {
+                  return DisplayCart(
+                    cart: crt.categories[index],
+                    onTap: () {
+                      addToCart(index);
+                    },
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
