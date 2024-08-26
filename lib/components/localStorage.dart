@@ -28,4 +28,9 @@ class Localstorage {
     final keys = prefs.getStringList(key);
     return keys;
   }
+
+  getData(key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString(key);
+  }
 }

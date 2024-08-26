@@ -22,10 +22,11 @@ class _CartloguesState extends State<Cartlogues> {
   void addToCart(index) {
     setState(() {
       isCartAdded = true;
-      cartCount + 1;
+      cartCount++;
       var addItems = crt.categories[index];
+      print(addItems);
       crt.onAdd(addItems);
-      print(crt.shopCart);
+      // print(crt.shopCart);
     });
   }
 
@@ -41,17 +42,47 @@ class _CartloguesState extends State<Cartlogues> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: clr.light.primaryColor,
-          foregroundColor: Colors.white,
-          elevation: 1,
-          leading: IconButton(
-            onPressed: () {
-              showCart();
-            },
-            icon: const Icon(Icons.trolley),
-            tooltip: _itemcount.toString(),
-          ),
-          title: const Center(child: Text('C A T L O G U E S'))),
+        backgroundColor: clr.light.primaryColor,
+        foregroundColor: Colors.white,
+        elevation: 1,
+        title: const Center(
+            child: Text(
+          'C A T L O G U E S',
+          style: TextStyle(color: Colors.black),
+        )),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  showCart();
+                },
+                icon: const Icon(Icons.trolley),
+                tooltip: _itemcount.toString(),
+              ),
+              isCartAdded
+                  ? Positioned(
+                      left: 0,
+                      top: 0,
+                      child: Container(
+                        height: 23,
+                        width: 23,
+                        decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12))),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(3, 2, 3, 5),
+                          child: Center(
+                            child: Text(_itemcount.toString()),
+                          ),
+                        ),
+                      ))
+                  : const Text('')
+            ],
+          )
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

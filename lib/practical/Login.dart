@@ -159,22 +159,32 @@ class _LoginState extends State<Login> {
                                 'email': _controller.text,
                                 'password': _pwdController.text
                               };
-
-                              services.userLogin(body);
                               setState(() {
                                 status = true;
                               });
-
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
-                                builder: (context) {
-                                  return const Screens();
-                                },
-                              ));
-                              _controller.clear();
-                              _pwdController.clear();
-                              setState(() {
-                                status = false;
+                              services
+                                  .userLogin(body)
+                                  .then((onValue) => {
+                                        Navigator.of(context)
+                                            .pushReplacement(MaterialPageRoute(
+                                          builder: (context) {
+                                            return const Screens();
+                                          },
+                                        )),
+                                      })
+                                  .catchError((e) {
+                                print("error: $e");
+                                errorMessage = e.toString();
+                                print('errorMessage: $errorMessage');
+                                _controller.clear();
+                                _pwdController.clear();
+                                return e;
+                              }).whenComplete(() {
+                                setState(() {
+                                  status = false;
+                                });
+                                _controller.clear();
+                                _pwdController.clear();
                               });
                             },
                       style: ElevatedButton.styleFrom(
@@ -182,7 +192,8 @@ class _LoginState extends State<Login> {
                           disabledBackgroundColor:
                               const Color(0xFF103B11).withOpacity(0.5)),
                       child: status == true
-                          ? const Text('checking')
+                          ? const Text('checking',
+                              style: TextStyle(color: Colors.white))
                           : const Text(
                               'Login',
                               style: TextStyle(color: Colors.white),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
+import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
 class CartList extends StatefulWidget {
   const CartList({super.key});
@@ -9,8 +10,15 @@ class CartList extends StatefulWidget {
 }
 
 final itms = CartItems();
+void payNow() {}
 
 class _CartListState extends State<CartList> {
+  @override
+  void initState() {
+    super.initState;
+    print(itms.shop);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,19 +40,28 @@ class _CartListState extends State<CartList> {
                       size: 60,
                       color: Colors.grey.shade800,
                     ),
-                    const Text('cart is empty')
+                    const Text('cart is empty'),
                   ],
                 ),
               )
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  final itm = itms.shopCart[index];
-                  return ListTile(
-                    leading: Image.asset(itm.imagePath),
-                    title: Text(itm.name),
-                    subtitle: Text(itm.price),
-                  );
-                },
+            : Column(
+                children: [
+                  ListView.builder(
+                    itemBuilder: (context, index) {
+                      final itm = itms.shopCart[index];
+                      return ListTile(
+                        leading: Image.asset(itm.imagePath),
+                        title: Text(itm.name),
+                        subtitle: Text(itm.price),
+                      );
+                    },
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [cusButton(payNow, 'Pay Now')],
+                  )
+                ],
               ));
   }
 }

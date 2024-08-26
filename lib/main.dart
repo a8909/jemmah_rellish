@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
-// import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
+import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
 import 'package:jemmah_rellish/practical/forgotpass.dart';
 import 'package:jemmah_rellish/practical/login.dart';
 import 'package:jemmah_rellish/practical/notification.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:jemmah_rellish/practical/sign.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:jemmah_rellish/practical/explore.dart';
 
 import 'practical/cartList.dart';
@@ -34,8 +35,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const Login(),
-        // login: (context) => const Login(),
+        '/': (context) => Localstorage().getData('auth') != null
+            ? const Login()
+            : const Splash(),
+        login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
         pswrd: (context) => Forgot(),
@@ -129,7 +132,14 @@ class _JehmaState extends State<Jehma> {
     super.initState();
     _slider();
     var auth = localstorage.updating(key: 'auth');
-    print(auth);
+    print('auth $auth');
+    getpref();
+  }
+
+  getpref() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    var auths = _pref.getString('auth');
+    print('auth: $auths');
   }
 
   @override
