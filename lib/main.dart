@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/components/controller/internetConnection.dart';
 import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
 import 'package:jemmah_rellish/practical/forgotpass.dart';
 import 'package:jemmah_rellish/practical/login.dart';
@@ -18,26 +19,41 @@ import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
 void main() {
+  // InternetConnection().checkConnection();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final songTheme = SongModel();
 
   // This widget is the root of your application.
+  @override
+  void initState() {
+    super.initState();
+    getpref();
+  }
+
+  getpref() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    final auths = _pref.getString('auth');
+    print('auths: $auths');
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: songTheme.displayTheme(),
-      // darkTheme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
+      theme: songTheme.lightMode ? songTheme.darkMode : songTheme.light,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => Localstorage().getData('auth') != null
-            ? const Login()
-            : const Splash(),
+        '/': (context) => getpref() == '' ? const Splash() : const Login(),
         login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
@@ -139,7 +155,7 @@ class _JehmaState extends State<Jehma> {
   getpref() async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
     var auths = _pref.getString('auth');
-    print('auth: $auths');
+    print('auths: $auths');
   }
 
   @override

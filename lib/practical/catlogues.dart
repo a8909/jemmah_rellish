@@ -24,6 +24,7 @@ class _CartloguesState extends State<Cartlogues> {
       isCartAdded = true;
       cartCount++;
       var addItems = crt.categories[index];
+
       print(addItems);
       crt.onAdd(addItems);
       // print(crt.shopCart);

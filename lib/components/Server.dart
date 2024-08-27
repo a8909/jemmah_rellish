@@ -26,35 +26,15 @@ class ServiceWorker {
   }
 
   Future<Map<String, dynamic>> userLogin(body) async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     var endPoint =
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
     var response = await http.post(Uri.parse(endPoint), body: jsonEncode(body));
     var data = jsonDecode(response.body);
 
     try {
-      if (response.statusCode == 200) {
-        _pref.setString('auth', data['idToken']);
-        return data;
-      } else {
-        final responseBody = jsonDecode(response.body);
-        final errorMessage =
-            responseBody['error']?['message'] ?? 'An error occurred';
-        switch (errorMessage) {
-          case 'INVALID_PASSWORD':
-            err = 'invalid password';
-            break;
-          case 'EMAIL_EXITS':
-            err = 'email already exist';
-            break;
-          case 'INVALID_LOGIN_CREDENTIALS':
-            err = 'Invalid login';
-            break;
-          default:
-            err = 'An error occurred';
-        }
-        return throw Exception(errorMessage);
-      }
+      pref.setString('auth', data['idToken']);
+      return response.statusCode == 200 ? data : "An error occurred";
     } catch (e) {
       return throw Exception(e); //onHandleError(e);
     }

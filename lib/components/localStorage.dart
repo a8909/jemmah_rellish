@@ -12,9 +12,9 @@ class Localstorage {
     prefs.getString(key);
   }
 
-  delete(String key) async {
+  Future remove(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.remove(key);
+    await prefs.remove(key);
   }
 
   Future<Future<bool>> postUpdate(String key, value) async {
@@ -32,5 +32,15 @@ class Localstorage {
   getData(key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.getString(key);
+  }
+
+  Future switching(String key, bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
+  }
+
+  getSwitch(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getBool(key);
   }
 }

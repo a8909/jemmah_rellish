@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/Server.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -10,6 +13,7 @@ class Login extends StatefulWidget {
 }
 
 final services = ServiceWorker();
+SongModel sng = SongModel();
 
 class _LoginState extends State<Login> {
   final TextEditingController _controller = TextEditingController();
@@ -138,11 +142,13 @@ class _LoginState extends State<Login> {
                           _pwdController.clear();
                           setState(() {
                             isLoggedIn = !isLoggedIn;
+                            bool switchMode = sng.lightMode = !sng.lightMode;
+                            sng.currentMode(switchMode);
                           });
 
                           // Navigator.of(context).pushNamed('/SignUp');
                         },
-                        child: isLoggedIn
+                        child: isLoggedIn == false
                             ? const Text('Sign up')
                             : const Text('Login'))
                   ],
@@ -172,14 +178,7 @@ class _LoginState extends State<Login> {
                                           },
                                         )),
                                       })
-                                  .catchError((e) {
-                                print("error: $e");
-                                errorMessage = e.toString();
-                                print('errorMessage: $errorMessage');
-                                _controller.clear();
-                                _pwdController.clear();
-                                return e;
-                              }).whenComplete(() {
+                                  .whenComplete(() {
                                 setState(() {
                                   status = false;
                                 });
@@ -199,9 +198,12 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.white),
                             )),
                 ),
-                services.err.isEmpty
-                    ? const Text('')
-                    : Text(errorMessage = services.err),
+                errorMessage.isEmpty
+                    ? const SizedBox.shrink()
+                    : Text(
+                        errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
 
                 // errorMessage should be displayed here
                 Align(

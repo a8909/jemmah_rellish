@@ -29,6 +29,8 @@ class _InstaState extends State<Insta> {
                     break;
                   case Option.log:
                     break;
+                  case Option.mode:
+                    break;
                   default:
                     print('No value found');
                     // TODO: Handle this case.
@@ -56,14 +58,13 @@ class _InstaState extends State<Insta> {
                                 alignment: Alignment.center,
                                 child: OutlinedButton(
                                     onPressed: () {
-                                      Localstorage().delete('auth');
+                                      state = true;
+                                      Localstorage().remove('auth');
                                       Navigator.pushReplacement(context,
                                           MaterialPageRoute(builder: (context) {
                                         return const Login();
                                       }));
                                       // Navigator.pop(context);
-
-                                      state = true;
                                     },
                                     child: const Text('Log out')),
                               )
@@ -77,6 +78,7 @@ class _InstaState extends State<Insta> {
                     onTap: () {
                       setState(() {
                         songTheme.lightMode = !songTheme.lightMode;
+                        print(songTheme.lightMode);
                       });
                     },
                   ),

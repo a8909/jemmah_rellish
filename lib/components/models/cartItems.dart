@@ -38,7 +38,7 @@ class CartItems {
 
   List<Cart> shopCart = [];
 
-  void onAdd(Cart cart) {
+  void onAdd(cart) {
     shopCart.add(cart);
   }
 
