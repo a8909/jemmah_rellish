@@ -16,8 +16,6 @@ class _ScreensState extends State<Screens> {
   @override
   void initState() {
     super.initState();
-
-    print('user has loggee in');
   }
 
   Menus currentIndex = Menus.home;
@@ -99,9 +97,9 @@ class MybottomNavigator extends StatelessWidget {
                     : Colors.black.withOpacity(0.3)),
             label: 'cart'),
       ],
-      showSelectedLabels: false,
+      showSelectedLabels: true,
       showUnselectedLabels: false,
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: const Color.fromARGB(255, 140, 152, 172),
     );
   }
 }

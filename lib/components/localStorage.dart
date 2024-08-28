@@ -9,7 +9,7 @@ class Localstorage {
 
   updating({required String key}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getString(key);
+    prefs.getString(key) ?? 'users login are empty';
   }
 
   Future remove(String key) async {
@@ -42,5 +42,15 @@ class Localstorage {
   getSwitch(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.getBool(key);
+  }
+
+  saveTooltip({required String key, required int value}) async {
+    final SharedPreferences db = await SharedPreferences.getInstance();
+    await db.setInt(key, value);
+  }
+
+  savedTooltips(String key) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.getInt(key);
   }
 }

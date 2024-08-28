@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/Server.dart';
-import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +36,18 @@ class _LoginState extends State<Login> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getusrPref();
+  }
+
+  _getusrPref() async {
+    final SharedPreferences getusr = await SharedPreferences.getInstance();
+    final value = getusr.getString('auth') ?? 'auth is empty';
+    print('value: $value');
   }
 
   @override

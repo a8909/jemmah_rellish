@@ -57,14 +57,13 @@ class _InstaState extends State<Insta> {
                               Align(
                                 alignment: Alignment.center,
                                 child: OutlinedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       state = true;
-                                      Localstorage().remove('auth');
+                                      await Localstorage().remove('auth');
                                       Navigator.pushReplacement(context,
                                           MaterialPageRoute(builder: (context) {
                                         return const Login();
                                       }));
-                                      // Navigator.pop(context);
                                     },
                                     child: const Text('Log out')),
                               )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/cartList.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Cartlogues extends StatefulWidget {
   const Cartlogues({super.key});
@@ -13,22 +15,32 @@ class Cartlogues extends StatefulWidget {
 
 class _CartloguesState extends State<Cartlogues> {
   final clr = SongModel();
+  var savedItems;
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
   int cartCount = 0;
   get _itemcount => cartCount;
 
-  void addToCart(index) {
+  void addToCart(index) async {
     setState(() {
       isCartAdded = true;
-      cartCount++;
+      cartCount + 1;
       var addItems = crt.categories[index];
-
       print(addItems);
       crt.onAdd(addItems);
       // print(crt.shopCart);
     });
+
+    // savedItems = await Localstorage()
+    //     .saveTooltip(key: 'tooltipCount', value: cartCount++);
+    // print(savedItems);
+    final SharedPreferences db = await SharedPreferences.getInstance();
+    savedItems = await db.setInt('tooltipCount', cartCount++);
+    print(savedItems);
+    final SharedPreferences dbs = await SharedPreferences.getInstance();
+    final tip = dbs.getInt('tooltioCount');
+    print(tip);
   }
 
   void showCart() {
@@ -43,7 +55,7 @@ class _CartloguesState extends State<Cartlogues> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clr.light.primaryColor,
+        backgroundColor: Colors.grey.shade200,
         foregroundColor: Colors.white,
         elevation: 1,
         title: const Center(
@@ -75,7 +87,11 @@ class _CartloguesState extends State<Cartlogues> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(3, 2, 3, 5),
                           child: Center(
-                            child: Text(_itemcount.toString()),
+                            child: Text(savedItems == null
+                                ? _itemcount.toString()
+                                : Localstorage()
+                                    .savedTooltips('tooltipCount')
+                                    .toString()),
                           ),
                         ),
                       ))

@@ -37,13 +37,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    getpref();
+    _updateUsr();
   }
 
-  getpref() async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    final auths = _pref.getString('auth');
-    print('auths: $auths');
+  _updateUsr() async {
+    await Localstorage().updating(key: 'auth');
   }
 
   @override
@@ -53,7 +51,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => getpref() == '' ? const Splash() : const Login(),
+        '/': (context) => _updateUsr() == null ? const Splash() : const Login(),
         login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
@@ -147,8 +145,6 @@ class _JehmaState extends State<Jehma> {
   void initState() {
     super.initState();
     _slider();
-    var auth = localstorage.updating(key: 'auth');
-    print('auth $auth');
     getpref();
   }
 
