@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
+import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/cartList.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Cartlogues extends StatefulWidget {
   const Cartlogues({super.key});
@@ -15,32 +15,33 @@ class Cartlogues extends StatefulWidget {
 
 class _CartloguesState extends State<Cartlogues> {
   final clr = SongModel();
+  Localstorage storage = Localstorage();
   var savedItems;
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
   int cartCount = 0;
   get _itemcount => cartCount;
+  var tipCount;
 
   void addToCart(index) async {
     setState(() {
       isCartAdded = true;
-      cartCount + 1;
-      var addItems = crt.categories[index];
-      print(addItems);
-      crt.onAdd(addItems);
-      // print(crt.shopCart);
+      cartCount = cartCount + 1;
+      var addItem = crt.categories[index];
+      final cart = Cart(
+          imagePath: addItem.imagePath,
+          name: addItem.name,
+          price: addItem.price,
+          content: addItem.content);
+
+      crt.onAdd(cart);
+      print(crt.shopCart);
     });
 
-    // savedItems = await Localstorage()
-    //     .saveTooltip(key: 'tooltipCount', value: cartCount++);
-    // print(savedItems);
-    final SharedPreferences db = await SharedPreferences.getInstance();
-    savedItems = await db.setInt('tooltipCount', cartCount++);
-    print(savedItems);
-    final SharedPreferences dbs = await SharedPreferences.getInstance();
-    final tip = dbs.getInt('tooltioCount');
-    print(tip);
+    savedItems = await Localstorage()
+        .saveTooltip(key: 'tooltipCount', value: cartCount++);
+    tipCount = Localstorage().savedTooltips('tooltipCount');
   }
 
   void showCart() {
@@ -68,7 +69,8 @@ class _CartloguesState extends State<Cartlogues> {
             children: [
               IconButton(
                 onPressed: () {
-                  showCart();
+                  Navigator.pushNamed(context, '/carts');
+                  // showCart();
                 },
                 icon: const Icon(Icons.trolley),
                 tooltip: _itemcount.toString(),
@@ -89,9 +91,7 @@ class _CartloguesState extends State<Cartlogues> {
                           child: Center(
                             child: Text(savedItems == null
                                 ? _itemcount.toString()
-                                : Localstorage()
-                                    .savedTooltips('tooltipCount')
-                                    .toString()),
+                                : tipCount.toString()),
                           ),
                         ),
                       ))

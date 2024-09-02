@@ -7,25 +7,23 @@ class InternetConnection {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription subscription;
   void checkConnection() {
-    List<ConnectivityResult> result = [];
-
-    subscription = _connectivity.onConnectivityChanged
-        .listen(_updatedStatus(result as ConnectivityResult));
+    subscription = _connectivity.onConnectivityChanged.listen(_updatedStatus);
   }
 
-  _updatedStatus(ConnectivityResult event) {
-    if (event == ConnectivityResult.none) {
-      const SnackBar(
-          content: Row(
-        children: [Icon(Icons.wifi_off), Text('Connection lost..')],
-      ));
-      return;
-    } else if (event == ConnectivityResult.mobile) {
-      const SnackBar(
-          content: Row(
-        children: [Icon(Icons.wifi), Text('Connection restored..')],
-      ));
-      return;
-    }
+  void _updatedStatus(List<ConnectivityResult> event) {
+    print(event);
+    // if () {
+    //   const SnackBar(
+    //       content: Row(
+    //     children: [Icon(Icons.wifi_off), Text('Connection lost..')],
+    //   ));
+    //   return;
+    // } else if (event == ConnectivityResult.mobile) {
+    //   const SnackBar(
+    //       content: Row(
+    //     children: [Icon(Icons.wifi), Text('Connection restored..')],
+    //   ));
+    //   return;
+    // }
   }
 }

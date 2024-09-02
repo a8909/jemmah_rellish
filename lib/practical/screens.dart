@@ -91,7 +91,7 @@ class MybottomNavigator extends StatelessWidget {
         BottomNavigationBarItem(
             icon: IconButton(
                 onPressed: () => onTap(Menus.catlogues),
-                icon: const Icon(Icons.shopping_cart),
+                icon: const Icon(Icons.shopping_bag),
                 color: currentIndex == Menus.catlogues
                     ? Colors.black
                     : Colors.black.withOpacity(0.3)),

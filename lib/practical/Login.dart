@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/components/Server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../components/services/server.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,7 +22,7 @@ class _LoginState extends State<Login> {
   bool box = true;
   bool isLoggedIn = false;
   bool status = false;
-  String errorMessage = '';
+  var errorMessage;
   String password = '';
   bool stateChecker = false;
 
@@ -173,8 +174,8 @@ class _LoginState extends State<Login> {
                           ? null
                           : () {
                               final body = {
-                                'email': _controller.text,
-                                'password': _pwdController.text
+                                'email': _controller.text.trim(),
+                                'password': _pwdController.text.trim()
                               };
                               setState(() {
                                 status = true;
@@ -189,7 +190,13 @@ class _LoginState extends State<Login> {
                                           },
                                         )),
                                       })
-                                  .whenComplete(() {
+                                  .catchError(
+                                (error) {
+                                  print('error: $error');
+                                  errorMessage = error.toString();
+                                  return errorMessage;
+                                },
+                              ).whenComplete(() {
                                 setState(() {
                                   status = false;
                                 });
@@ -209,12 +216,12 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.white),
                             )),
                 ),
-                errorMessage.isEmpty
-                    ? const SizedBox.shrink()
-                    : Text(
-                        errorMessage,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                // errorMessage == ''
+                //     ? const SizedBox.shrink()
+                //     : Text(
+                //         errorMessage,
+                //         style: const TextStyle(color: Colors.red),
+                //       ),
 
                 // errorMessage should be displayed here
                 Align(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -10,6 +11,7 @@ class CartList extends StatefulWidget {
 }
 
 final itms = CartItems();
+Localstorage storage = Localstorage();
 void payNow() {}
 
 class _CartListState extends State<CartList> {
@@ -17,6 +19,8 @@ class _CartListState extends State<CartList> {
   void initState() {
     super.initState;
     print(itms.shop);
+    // final key = await storage.getPost('cartKey');
+    // print('cartKey: $key');
   }
 
   @override
@@ -47,6 +51,8 @@ class _CartListState extends State<CartList> {
             : Column(
                 children: [
                   ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: itms.shopCart.length,
                     itemBuilder: (context, index) {
                       final itm = itms.shopCart[index];
                       return ListTile(
@@ -57,9 +63,12 @@ class _CartListState extends State<CartList> {
                     },
                   ),
                   const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [cusButton(payNow, 'Pay Now')],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [cusButton(payNow, 'Pay Now')],
+                    ),
                   )
                 ],
               ));

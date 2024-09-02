@@ -1,11 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jemmah_rellish/components/allPost.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/userPost.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/models/postArray.dart';
 
@@ -18,7 +19,7 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   final TextEditingController _controller = TextEditingController();
-
+  GlobalColors clr = GlobalColors();
   File? img;
   String _sngImg = "";
   bool displayImage = false;
@@ -37,23 +38,31 @@ class _PostsState extends State<Posts> {
     });
   }
 
-  onCreatePost() {
+  onCreatePost() async {
     UsrPost postRev = UsrPost(
         img: _sngImg, name: 'Jacob Brilliant', comment: _controller.text);
+    if (postRev.img.isEmpty || postRev.comment.isEmpty) {
+      displayImage = false;
+      return;
+    }
     setState(() {
       postArray.userPost.add(postRev);
-      _storage.getPost('pst');
     });
-    print(postRev);
+    final post = jsonEncode(postRev.tojson());
+    await _storage.savepostUpdate('pst', post);
     _controller.clear();
     displayImage = false;
     Navigator.pop(context);
   }
 
   void _getReviews() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('pst') && postArray.userPost.isNotEmpty) {
-      _storage.getPost('pst');
+    final userPost = await _storage.getPost('pst');
+    if (postArray.userPost.isNotEmpty || userPost != null) {
+      setState(() {
+        userPost
+            .map((eachPost) => UsrPost.fromJson(jsonDecode(eachPost)))
+            .toList();
+      });
     }
   }
 
@@ -66,6 +75,23 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {}, icon: const Icon(Icons.location_on_sharp)),
+        title: const Center(
+          child: Text(
+            'Posts',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/Notify');
+              },
+              icon: const Icon(Icons.notifications))
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.tag),
         onPressed: () {
@@ -95,6 +121,9 @@ class _PostsState extends State<Posts> {
                       ),
                       TextField(
                         textCapitalization: TextCapitalization.sentences,
+                        onChanged: (value) {
+                          _controller.text = value;
+                        },
                         controller: _controller,
                         decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
@@ -109,6 +138,12 @@ class _PostsState extends State<Posts> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5)))),
                       ),
+                      _controller.text.isEmpty && _controller.text == ''
+                          ? Text(
+                              'Field is required',
+                              style: TextStyle(color: clr.danger),
+                            )
+                          : const Text(''),
                       const SizedBox(
                         height: 16,
                       ),
@@ -166,35 +201,12 @@ class _PostsState extends State<Posts> {
           );
         },
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.location_on_sharp)),
-                  const Text(
-                    'Posts',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/Notify');
-                      },
-                      icon: const Icon(Icons.notifications))
-                ],
-              ),
-              const Divider(
-                height: 30,
-              ),
-              ListView.separated(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView.separated(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return AllPost(usp: postArray.singlePost[index]);
@@ -202,9 +214,9 @@ class _PostsState extends State<Posts> {
                   separatorBuilder: (context, index) => const SizedBox(
                         height: 10,
                       ),
-                  itemCount: postArray.userPost.length)
-            ],
-          ),
+                  itemCount: postArray.userPost.length),
+            )
+          ],
         ),
       ),
     );

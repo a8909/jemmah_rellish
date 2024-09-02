@@ -11,11 +11,7 @@ class AllPost extends StatelessWidget {
       children: [
         Row(
           children: [
-            Image.asset(
-              usp.img,
-              height: 40,
-              width: 40,
-            ),
+            CircleAvatar(radius: 20, backgroundImage: AssetImage(usp.img)),
             const SizedBox(
               width: 16,
             ),

@@ -10,7 +10,7 @@ class DisplayCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      width: 400,
+      width: 200,
       decoration: BoxDecoration(
           color: Colors.grey.shade400,
           borderRadius: const BorderRadius.all(Radius.circular(12))),

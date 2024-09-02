@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
-import 'package:jemmah_rellish/components/server.dart';
+import 'package:jemmah_rellish/components/services/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/components/controller/internetConnection.dart';
 import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         pswrd: (context) => Forgot(),
         notifi: (context) => const Not(),
         sign: (context) => Signup(),
-        'carts': (context) => const CartList(),
+        '/carts': (context) => const CartList(),
       },
     );
   }
