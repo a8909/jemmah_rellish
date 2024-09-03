@@ -113,21 +113,26 @@ class _CartloguesState extends State<Cartlogues> {
                 Text('to jehmma rellish big store...')
               ],
             ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: crt.categories.length,
-                itemBuilder: (context, index) {
-                  return DisplayCart(
-                    cart: crt.categories[index],
-                    onTap: () {
-                      addToCart(index);
-                    },
-                  );
-                },
+            AspectRatio(
+              aspectRatio: 0.81,
+              child: SizedBox(
+                width: double.infinity,
+                child: GridView.builder(
+                  itemCount: crt.categories.length,
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemBuilder: (context, index) {
+                    return DisplayCart(
+                      cart: crt.categories[index],
+                      onTap: () {
+                        addToCart(index);
+                      },
+                    );
+                  },
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

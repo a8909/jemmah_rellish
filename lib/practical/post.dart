@@ -48,20 +48,20 @@ class _PostsState extends State<Posts> {
     setState(() {
       postArray.userPost.add(postRev);
     });
-    final post = jsonEncode(postRev.tojson());
-    await _storage.savepostUpdate('pst', post);
+    List<String> savepost = postArray.userPost
+        .map((eachPost) => jsonEncode(eachPost.tojson()))
+        .toList();
+    await _storage.savepostUpdate('pst', savepost);
     _controller.clear();
     displayImage = false;
     Navigator.pop(context);
   }
 
   void _getReviews() async {
-    final userPost = await _storage.getPost('pst');
+    List<String>? userPost = await _storage.getPost('pst');
     if (postArray.userPost.isNotEmpty || userPost != null) {
       setState(() {
-        userPost
-            .map((eachPost) => UsrPost.fromJson(jsonDecode(eachPost)))
-            .toList();
+        userPost?.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
       });
     }
   }

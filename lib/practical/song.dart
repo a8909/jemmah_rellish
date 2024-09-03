@@ -27,13 +27,14 @@ class _SongState extends State<Song> {
           itemBuilder: (context, index) {
             final Songs s = sng.songs[index];
             return ListTile(
+              leading: Image.asset(s.albumImgPath),
               title: Text(s.songName),
               subtitle: Text(s.artistName),
               onTap: () {
                 sng.currentSongIndex = index;
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return const SongPage();
+                    return SongPage();
                   },
                 ));
               },

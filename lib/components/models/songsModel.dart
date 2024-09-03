@@ -7,26 +7,26 @@ class SongModel {
   Localstorage storage = Localstorage();
   List<Songs> songs = [
     Songs(
-        songName: 'songName',
-        artistName: 'artistName',
-        albumImgPath: 'albumImgPath',
+        songName: 'Stronger',
+        artistName: 'Young jonn',
+        albumImgPath: 'assets/image/p3.jpeg',
         audioPath: 'audioPath'),
-    Songs(
-        songName: 'songName',
-        artistName: 'artistName',
-        albumImgPath: 'albumImgPath',
-        audioPath: 'audioPath'),
-    Songs(
-        songName: 'songName',
-        artistName: 'artistName',
-        albumImgPath: 'albumImgPath',
-        audioPath: 'audioPath')
+    // Songs(
+    //     songName: 'Higher',
+    //     artistName: 'Burna boy',
+    //     albumImgPath: 'assets/image/p4.jpeg',
+    //     audioPath: 'audioPath'),
+    // Songs(
+    //     songName: 'Wrong Direction',
+    //     artistName: 'Passenger',
+    //     albumImgPath: 'assets/image/p5.jpeg',
+    //     audioPath: 'audioPath')
   ];
 
   List<Songs> get playlist => songs;
 
   int? currentSongIndex;
-  // get songIndex => currentSongIndex;
+  get songIndex => currentSongIndex;
 
   set currentSong(int? currentIndex) {
     currentSongIndex = currentIndex;

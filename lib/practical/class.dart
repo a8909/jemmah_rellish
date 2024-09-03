@@ -17,7 +17,7 @@ class _ItemsState extends State<Items> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -25,6 +25,7 @@ class _ItemsState extends State<Items> {
             backgroundImage: AssetImage(widget.image),
             radius: 20,
           ),
+          const SizedBox(width: 5),
           Text(widget.recepie),
           const Spacer(),
           Text(widget.price)

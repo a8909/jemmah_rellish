@@ -9,19 +9,21 @@ class DisplayCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      width: 200,
+      margin: const EdgeInsets.only(bottom: 8, right: 5),
+      width: 100,
       decoration: BoxDecoration(
           color: Colors.grey.shade400,
           borderRadius: const BorderRadius.all(Radius.circular(12))),
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.asset(cart.imagePath),
+            Image.asset(
+              cart.imagePath,
+              height: 50,
+              width: double.infinity,
             ),
             Center(
               child: Text(cart.content),
@@ -46,14 +48,17 @@ class DisplayCart extends StatelessWidget {
                             onTap: onTap,
                             child: const Text(
                               'Add to cart',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
                             ))
                       ],
                     ),
                   ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -67,7 +72,7 @@ Container cusButton(Function()? onTap, String cusText) {
         color: Colors.green,
         borderRadius: BorderRadius.all(Radius.circular(8))),
     child: Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(5),
       child: Row(
         children: [
           GestureDetector(
