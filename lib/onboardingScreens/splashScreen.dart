@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/practical/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -31,12 +32,14 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.only(left: 20, right: 5),
-        child: Text(
-          'JEMMAH r e l i s h...',
-          style: TextStyle(fontSize: 30),
+    return const Scaffold(
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 5),
+          child: Text(
+            'JEMMAH r e l i s h...',
+            style: TextStyle(fontSize: 30),
+          ),
         ),
       ),
     );

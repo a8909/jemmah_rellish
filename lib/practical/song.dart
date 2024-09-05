@@ -31,10 +31,10 @@ class _SongState extends State<Song> {
               title: Text(s.songName),
               subtitle: Text(s.artistName),
               onTap: () {
-                sng.currentSongIndex = index;
+                sng.currentSong = index;
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return SongPage();
+                    return const SongPage();
                   },
                 ));
               },

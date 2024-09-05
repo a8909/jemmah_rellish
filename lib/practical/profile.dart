@@ -76,7 +76,8 @@ class _InstaState extends State<Insta> {
                     child: const Text('Mode'),
                     onTap: () {
                       setState(() {
-                        songTheme.lightMode = !songTheme.lightMode;
+                        final mode = songTheme.lightMode = !songTheme.lightMode;
+                        songTheme.themes = mode;
                         print(songTheme.lightMode);
                       });
                     },

@@ -38,13 +38,13 @@ class CartItems {
 
   List<Cart> shopCart = [
     Cart(
-        imagePath: "assets/image/smoothie.jpeg",
-        name: 'Cocktail',
+        imagePath: "assets/image/shaw.jpeg",
+        name: 'Shawamar',
         price: "2000",
         content: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/smth.jpg",
-        name: 'Smotthie',
+        imagePath: "assets/image/zobo.jpeg",
+        name: 'Zobo',
         price: "2000",
         content: 'Taste nice and better'),
   ];
@@ -53,5 +53,13 @@ class CartItems {
     shopCart.add(cart);
   }
 
-  get shop => shopCart;
+  List<Cart> get shop => shopCart;
+
+  int? currentlyShopping;
+
+  set currentShop(int? newshop) {
+    currentlyShopping = newshop;
+  }
+
+  get shopping => currentlyShopping;
 }

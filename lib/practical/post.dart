@@ -51,7 +51,8 @@ class _PostsState extends State<Posts> {
     List<String> savepost = postArray.userPost
         .map((eachPost) => jsonEncode(eachPost.tojson()))
         .toList();
-    await _storage.savepostUpdate('pst', savepost);
+    final posting = await _storage.savepostUpdate('pst', savepost);
+    print('posting: $posting');
     _controller.clear();
     displayImage = false;
     Navigator.pop(context);
@@ -80,8 +81,8 @@ class _PostsState extends State<Posts> {
             onPressed: () {}, icon: const Icon(Icons.location_on_sharp)),
         title: const Center(
           child: Text(
-            'Posts',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            'P o s t s',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         actions: [
@@ -120,6 +121,8 @@ class _PostsState extends State<Posts> {
                         height: 16,
                       ),
                       TextField(
+                        maxLines: 4,
+                        minLines: 2,
                         textCapitalization: TextCapitalization.sentences,
                         onChanged: (value) {
                           _controller.text = value;
@@ -141,9 +144,9 @@ class _PostsState extends State<Posts> {
                       _controller.text.isEmpty && _controller.text == ''
                           ? Text(
                               'Field is required',
-                              style: TextStyle(color: clr.danger),
+                              style: TextStyle(color: clr.danger, fontSize: 8),
                             )
-                          : const Text(''),
+                          : const SizedBox.shrink(),
                       const SizedBox(
                         height: 16,
                       ),
@@ -212,7 +215,7 @@ class _PostsState extends State<Posts> {
                     return AllPost(usp: postArray.singlePost[index]);
                   },
                   separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
+                        height: 8,
                       ),
                   itemCount: postArray.userPost.length),
             )

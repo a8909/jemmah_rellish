@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+
 import 'package:jemmah_rellish/practical/neuBox.dart';
 
 class SongPage extends StatefulWidget {
-  SongPage({super.key});
+  const SongPage({super.key});
 
   @override
   State<SongPage> createState() => _SongPageState();
 }
 
 class _SongPageState extends State<SongPage> {
-  final SongModel _sngmodel = SongModel();
+  final SongModel sngmodel = SongModel();
+  late var newsng;
+  late var _playingList;
+
+  @override
+  void initState() {
+    super.initState();
+
+    newsng = sngmodel.songIndex;
+    _playingList = sngmodel.playlist[newsng];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +41,10 @@ class _SongPageState extends State<SongPage> {
                       Navigator.pop(context);
                     },
                     icon: const Icon(Icons.arrow_back)),
-                const Text('P L A Y L I S T'),
+                const Text(
+                  'P L A Y L I S T',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const Icon(Icons.menu)
               ],
             ),
@@ -38,51 +52,42 @@ class _SongPageState extends State<SongPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
             child: NeuBox(
-                child: Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: _sngmodel.songs.length,
-                itemBuilder: (context, index) {
-                  final nowPlaying = _sngmodel.songs[index];
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 30, 5, 5),
-                    child: Column(
-                      children: [
-                        Image.asset(nowPlaying.albumImgPath),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 30, 5, 5),
+                child: Column(
+                  children: [
+                    Image.asset(_playingList.albumImgPath),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    nowPlaying.songName,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    nowPlaying.artistName,
-                                  )
-                                ],
+                              Text(
+                                _playingList.songName,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              const Icon(
-                                Icons.favorite,
-                                color: Colors.red,
+                              Text(
+                                _playingList.artistName,
                               )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                },
+                          const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            )),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
@@ -130,9 +135,17 @@ class _SongPageState extends State<SongPage> {
                     child: GestureDetector(
                         onTap: () {},
                         child: NeuBox(
-                            child: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Icon(Icons.play_arrow),
+                            child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  sngmodel.pauseResume(_playingList.audioPath);
+                                });
+                              },
+                              child: Icon(sngmodel.isPlaying
+                                  ? Icons.play_arrow
+                                  : Icons.pause)),
                         )))),
                 const SizedBox(width: 20),
                 Expanded(
@@ -145,7 +158,7 @@ class _SongPageState extends State<SongPage> {
                         )))),
               ],
             ),
-          )
+          ),
         ],
       ),
     ));

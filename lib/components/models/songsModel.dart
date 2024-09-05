@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/playSong.dart';
@@ -9,30 +10,36 @@ class SongModel {
     Songs(
         songName: 'Stronger',
         artistName: 'Young jonn',
-        albumImgPath: 'assets/image/p3.jpeg',
-        audioPath: 'audioPath'),
-    // Songs(
-    //     songName: 'Higher',
-    //     artistName: 'Burna boy',
-    //     albumImgPath: 'assets/image/p4.jpeg',
-    //     audioPath: 'audioPath'),
-    // Songs(
-    //     songName: 'Wrong Direction',
-    //     artistName: 'Passenger',
-    //     albumImgPath: 'assets/image/p5.jpeg',
-    //     audioPath: 'audioPath')
+        albumImgPath: 'assets/image/youngJonn.jpeg',
+        audioPath: 'Young-Jonn-Stronger-(TrendyBeatz.com).mp3'),
+    Songs(
+        songName: 'Higher',
+        artistName: 'Burna boy',
+        albumImgPath: 'assets/image/burna.jpeg',
+        audioPath: 'Burna-Boy-Higher-(TrendyBeatz.com).mp3'),
+    Songs(
+        songName: 'Awolowo',
+        artistName: 'Passenger',
+        albumImgPath: 'assets/image/awolowo.jpeg',
+        audioPath: 'assets/audios/Fido-Awolowo-(TrendyBeatz.com).mp3')
   ];
 
   List<Songs> get playlist => songs;
 
   int? currentSongIndex;
-  get songIndex => currentSongIndex;
 
-  set currentSong(int? currentIndex) {
-    currentSongIndex = currentIndex;
+  set currentSong(int? newSong) {
+    currentSongIndex = newSong;
   }
 
+  get songIndex => currentSongIndex;
+
   bool lightMode = false;
+
+  set themes(bool newTheme) {
+    lightMode = newTheme;
+  }
+
   currentMode(bool newmode) async {
     final SharedPreferences getTheme = await SharedPreferences.getInstance();
 
@@ -57,4 +64,23 @@ class SongModel {
           surface: Colors.grey.shade900,
           primary: Colors.grey.shade500,
           secondary: Colors.grey.shade700));
+
+  final AudioPlayer audioplayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration? _duration;
+  Duration? _position;
+
+  void play(String path) async {
+    isPlaying = true;
+    await audioplayer.play(AssetSource(path));
+  }
+
+  void pause() async {
+    isPlaying = false;
+    await audioplayer.pause();
+  }
+
+  void pauseResume(String musicPath) {
+    isPlaying ? play(musicPath) : pause();
+  }
 }

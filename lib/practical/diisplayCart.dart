@@ -35,7 +35,7 @@ class DisplayCart extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(cart.price),
+                Text('\$${cart.price}'),
                 Container(
                   decoration: const BoxDecoration(
                       color: Colors.green,

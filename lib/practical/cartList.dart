@@ -18,9 +18,7 @@ class _CartListState extends State<CartList> {
   @override
   void initState() {
     super.initState;
-    print(itms.shop);
-    // final key = await storage.getPost('cartKey');
-    // print('cartKey: $key');
+    print(itms.shopCart.length);
   }
 
   @override
@@ -48,29 +46,50 @@ class _CartListState extends State<CartList> {
                   ],
                 ),
               )
-            : Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: itms.shopCart.length,
-                    itemBuilder: (context, index) {
-                      final itm = itms.shopCart[index];
-                      return ListTile(
-                        leading: Image.asset(itm.imagePath),
-                        title: Text(itm.name),
-                        subtitle: Text(itm.price),
-                      );
-                    },
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [cusButton(payNow, 'Pay Now')],
+            : Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListView.builder(
+                        itemCount: itms.shopCart.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final singlecart = itms.shop[index];
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(1),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(12))),
+                            child: ListTile(
+                              leading: Image.asset(
+                                singlecart.imagePath,
+                                height: 50,
+                                width: 50,
+                              ),
+                              title: Text(
+                                singlecart.name,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(singlecart.price),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  )
-                ],
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [cusButton(payNow, 'Pay Now')],
+                      ),
+                    )
+                  ],
+                ),
               ));
   }
 }

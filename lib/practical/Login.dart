@@ -26,37 +26,18 @@ class _LoginState extends State<Login> {
   String password = '';
   bool stateChecker = false;
 
-  isLoading() {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          content: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    _getusrPref();
-  }
-
-  _getusrPref() async {
-    final SharedPreferences getusr = await SharedPreferences.getInstance();
-    final value = getusr.getString('auth') ?? 'auth is empty';
-    print('value: $value');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 200, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 170, 20, 0),
           child: Align(
             alignment: Alignment.center,
             child: Column(
@@ -69,9 +50,12 @@ class _LoginState extends State<Login> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       'to jemmah rellish Big Store....',
-                      style: TextStyle(fontSize: 8),
+                      style: TextStyle(fontSize: 10),
                     )
                   ],
                 ),
@@ -235,6 +219,25 @@ class _LoginState extends State<Login> {
                         // style: TextStyle(color: Colors.red),
                       )),
                 ),
+                const SizedBox(height: 20),
+                Center(
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(1),
+                        )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Center(
+                        child: Image.asset('assets/image/google.png',
+                            width: 50, height: 50),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

@@ -3,7 +3,6 @@ import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
-import 'package:jemmah_rellish/practical/cartList.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
 class Cartlogues extends StatefulWidget {
@@ -28,6 +27,7 @@ class _CartloguesState extends State<Cartlogues> {
     setState(() {
       isCartAdded = true;
       cartCount = cartCount + 1;
+      crt.currentShop = index;
       var addItem = crt.categories[index];
       final cart = Cart(
           imagePath: addItem.imagePath,
@@ -45,11 +45,7 @@ class _CartloguesState extends State<Cartlogues> {
   }
 
   void showCart() {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) {
-        return const CartList();
-      },
-    ));
+    Navigator.pushNamed(context, '/carts');
   }
 
   @override
@@ -69,10 +65,12 @@ class _CartloguesState extends State<Cartlogues> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/carts');
-                  // showCart();
+                  showCart();
                 },
-                icon: const Icon(Icons.trolley),
+                icon: const Icon(
+                  Icons.trolley,
+                  size: 30,
+                ),
                 tooltip: _itemcount.toString(),
               ),
               isCartAdded

@@ -37,21 +37,23 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _updateUsr();
   }
 
-  _updateUsr() async {
-    await Localstorage().updating(key: 'auth');
+  _getusrPref() async {
+    final SharedPreferences getusr = await SharedPreferences.getInstance();
+    final value = getusr.getString('auth') ?? 'auth is empty';
+    print('value: $value');
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: songTheme.lightMode ? songTheme.darkMode : songTheme.light,
+      theme: songTheme.thm ? songTheme.darkMode : songTheme.light,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => _updateUsr() == null ? const Splash() : const Login(),
+        '/': (context) =>
+            _getusrPref() == 'auth is empty' ? const Splash() : const Login(),
         login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
