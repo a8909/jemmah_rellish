@@ -18,7 +18,6 @@ class _CartListState extends State<CartList> {
   @override
   void initState() {
     super.initState;
-    print(itms.shopCart.length);
   }
 
   @override

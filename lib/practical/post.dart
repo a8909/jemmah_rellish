@@ -125,7 +125,9 @@ class _PostsState extends State<Posts> {
                         minLines: 2,
                         textCapitalization: TextCapitalization.sentences,
                         onChanged: (value) {
-                          _controller.text = value;
+                          setState(() {
+                            _controller.text = value;
+                          });
                         },
                         controller: _controller,
                         decoration: const InputDecoration(
@@ -141,10 +143,14 @@ class _PostsState extends State<Posts> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5)))),
                       ),
-                      _controller.text.isEmpty && _controller.text == ''
-                          ? Text(
-                              'Field is required',
-                              style: TextStyle(color: clr.danger, fontSize: 8),
+                      _controller.text.isEmpty
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Field is required',
+                                style:
+                                    TextStyle(color: clr.danger, fontSize: 8),
+                              ),
                             )
                           : const SizedBox.shrink(),
                       const SizedBox(

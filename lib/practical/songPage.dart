@@ -5,7 +5,8 @@ import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/neuBox.dart';
 
 class SongPage extends StatefulWidget {
-  const SongPage({super.key});
+  final int index;
+  const SongPage({super.key, required this.index});
 
   @override
   State<SongPage> createState() => _SongPageState();
@@ -13,15 +14,13 @@ class SongPage extends StatefulWidget {
 
 class _SongPageState extends State<SongPage> {
   final SongModel sngmodel = SongModel();
-  late var newsng;
   late var _playingList;
 
   @override
   void initState() {
     super.initState();
 
-    newsng = sngmodel.songIndex;
-    _playingList = sngmodel.playlist[newsng];
+    _playingList = sngmodel.playlist[widget.index];
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/services/server.dart';
 
@@ -178,6 +177,9 @@ class _LoginState extends State<Login> {
                                 (error) {
                                   print('error: $error');
                                   errorMessage = error.toString();
+                                  if (error.error.error['message']) {
+                                    errorMessage = 'An error occurred';
+                                  }
                                   return errorMessage;
                                 },
                               ).whenComplete(() {
@@ -200,10 +202,10 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.white),
                             )),
                 ),
-                // errorMessage == ''
+                // errorMessage.toString().isEmpty
                 //     ? const SizedBox.shrink()
                 //     : Text(
-                //         errorMessage,
+                //         errorMessage.toString(),
                 //         style: const TextStyle(color: Colors.red),
                 //       ),
 

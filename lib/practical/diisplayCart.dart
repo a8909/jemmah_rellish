@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
+import 'package:jemmah_rellish/components/models/pagination.dart';
 
-class DisplayCart extends StatelessWidget {
+class DisplayCart extends StatefulWidget {
   final Cart cart;
   final void Function()? onTap;
   const DisplayCart({super.key, required this.cart, this.onTap});
+
+  @override
+  State<DisplayCart> createState() => _DisplayCartState();
+}
+
+class _DisplayCartState extends State<DisplayCart> {
+  final Pagination pagination = Pagination();
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +29,21 @@ class DisplayCart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              cart.imagePath,
+              widget.cart.imagePath,
               height: 50,
               width: double.infinity,
             ),
             Center(
-              child: Text(cart.content),
+              child: Text(widget.cart.content),
             ),
             Text(
-              cart.name,
+              widget.cart.name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('\$${cart.price}'),
+                Text('\$${widget.cart.price}'),
                 Container(
                   decoration: const BoxDecoration(
                       color: Colors.green,
@@ -45,7 +53,7 @@ class DisplayCart extends StatelessWidget {
                     child: Row(
                       children: [
                         GestureDetector(
-                            onTap: onTap,
+                            onTap: widget.onTap,
                             child: const Text(
                               'Add to cart',
                               style: TextStyle(

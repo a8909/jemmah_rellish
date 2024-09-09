@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
+import 'package:jemmah_rellish/components/models/colors.dart';
+import 'package:jemmah_rellish/components/models/pagination.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -15,13 +17,45 @@ class Cartlogues extends StatefulWidget {
 class _CartloguesState extends State<Cartlogues> {
   final clr = SongModel();
   Localstorage storage = Localstorage();
-  var savedItems;
+  final Pagination pagination = Pagination();
+  final GlobalColors color = GlobalColors();
+  final TextEditingController _serchController = TextEditingController();
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
   int cartCount = 0;
   get _itemcount => cartCount;
-  var tipCount;
+  List items = [];
+
+  void showModal(String productImage, String productName) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            height: 350,
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(productImage),
+                Text('$productName has been successfully added to cart'),
+                const SizedBox(height: 5),
+                MaterialButton(
+                  color: color.success,
+                  child: const Text('ok'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void addToCart(index) async {
     setState(() {
@@ -36,16 +70,41 @@ class _CartloguesState extends State<Cartlogues> {
           content: addItem.content);
 
       crt.onAdd(cart);
+      showModal(addItem.imagePath, addItem.name);
       print(crt.shopCart);
     });
-
-    savedItems = await Localstorage()
-        .saveTooltip(key: 'tooltipCount', value: cartCount++);
-    tipCount = Localstorage().savedTooltips('tooltipCount');
   }
 
   void showCart() {
     Navigator.pushNamed(context, '/carts');
+  }
+
+  void onPrevious() {
+    setState(() {
+      pagination.setpageIndex(pagination.initialPage - 1);
+    });
+  }
+
+  void onNext() {
+    setState(() {
+      pagination.setpageIndex(pagination.initialPage + 1);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    items = crt.categories;
+  }
+
+  void onSearch(String search) {
+    if (search.isEmpty) {
+      items = crt.categories;
+    } else {
+      items = crt.categories.where((s) {
+        return s.name.toLowerCase().contains(search.toLowerCase());
+      }).toList();
+    }
   }
 
   @override
@@ -87,19 +146,18 @@ class _CartloguesState extends State<Cartlogues> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(3, 2, 3, 5),
                           child: Center(
-                            child: Text(savedItems == null
-                                ? _itemcount.toString()
-                                : tipCount.toString()),
+                            child: Text(_itemcount.toString()),
                           ),
                         ),
                       ))
-                  : const Text('')
+                  : const SizedBox.shrink()
             ],
           )
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding:
+            const EdgeInsets.only(top: 10.0, left: 10, right: 10, bottom: 10),
         child: Column(
           children: [
             const Row(
@@ -111,26 +169,53 @@ class _CartloguesState extends State<Cartlogues> {
                 Text('to jehmma rellish big store...')
               ],
             ),
-            AspectRatio(
-              aspectRatio: 0.81,
-              child: SizedBox(
-                width: double.infinity,
-                child: GridView.builder(
-                  itemCount: crt.categories.length,
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return DisplayCart(
-                      cart: crt.categories[index],
-                      onTap: () {
-                        addToCart(index);
-                      },
-                    );
-                  },
-                ),
+            TextField(
+                controller: _serchController,
+                onChanged: (value) {
+                  onSearch(value);
+                },
+                decoration: const InputDecoration(
+                    hintText: 'Search to filter product',
+                    suffixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8))))),
+            const SizedBox(height: 10),
+            Expanded(
+              child: GridView.builder(
+                itemCount: crt.categories.length,
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemBuilder: (context, index) {
+                  return DisplayCart(
+                    cart: crt.categories[index],
+                    // cart: pagination.totalPage[index],
+                    onTap: () {
+                      addToCart(index);
+                    },
+                  );
+                },
               ),
             ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     cusButton(
+            //         pagination.initialPage == 1
+            //             ? null
+            //             : () {
+            //                 onPrevious();
+            //               },
+            //         'Previous'),
+            //     cusButton(
+            //         pagination.initialPage == pagination.pages.length - 1
+            //             ? null
+            //             : () {
+            //                 onNext();
+            //               },
+            //         'Next')
+            //   ],
+            // )
           ],
         ),
       ),

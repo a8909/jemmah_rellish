@@ -11,7 +11,7 @@ class Song extends StatefulWidget {
   State<Song> createState() => _SongState();
 }
 
-final sng = SongModel();
+final SongModel sng = SongModel();
 
 class _SongState extends State<Song> {
   @override
@@ -34,7 +34,7 @@ class _SongState extends State<Song> {
                 sng.currentSong = index;
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return const SongPage();
+                    return SongPage(index: index);
                   },
                 ));
               },

@@ -67,8 +67,8 @@ class SongModel {
 
   final AudioPlayer audioplayer = AudioPlayer();
   bool isPlaying = false;
-  Duration? _duration;
-  Duration? _position;
+  // Duration? _duration;
+  // Duration? _position;
 
   void play(String path) async {
     isPlaying = true;
