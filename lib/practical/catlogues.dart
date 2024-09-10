@@ -81,13 +81,13 @@ class _CartloguesState extends State<Cartlogues> {
 
   void onPrevious() {
     setState(() {
-      pagination.setpageIndex(pagination.initialPage - 1);
+      pagination.pageIndex = pagination.initialPage - 1;
     });
   }
 
   void onNext() {
     setState(() {
-      pagination.setpageIndex(pagination.initialPage + 1);
+      pagination.pageIndex = pagination.initialPage + 1;
     });
   }
 
@@ -95,16 +95,21 @@ class _CartloguesState extends State<Cartlogues> {
   void initState() {
     super.initState();
     items = crt.categories;
+    print(items);
   }
 
   void onSearch(String search) {
-    if (search.isEmpty) {
-      items = crt.categories;
-    } else {
-      items = crt.categories.where((s) {
-        return s.name.toLowerCase().contains(search.toLowerCase());
-      }).toList();
-    }
+    setState(() {
+      if (search.isEmpty) {
+        items = crt.categories;
+      } else {
+        items = crt.categories.where((s) {
+          final queryList = s.name.toLowerCase().contains(search.toLowerCase());
+          print('query of ${s.name}: $queryList');
+          return queryList;
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -180,23 +185,26 @@ class _CartloguesState extends State<Cartlogues> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
-            Expanded(
-              child: GridView.builder(
-                itemCount: crt.categories.length,
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) {
-                  return DisplayCart(
-                    cart: crt.categories[index],
-                    // cart: pagination.totalPage[index],
-                    onTap: () {
-                      addToCart(index);
-                    },
-                  );
-                },
-              ),
-            ),
+            items.isEmpty
+                ? const Text('Enter a vaild search entry')
+                : Expanded(
+                    child: GridView.builder(
+                      itemCount: items.length,
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                      itemBuilder: (context, index) {
+                        return DisplayCart(
+                          cart: items[index],
+                          // cart: pagination.totalPage[index],
+                          onTap: () {
+                            addToCart(index);
+                          },
+                        );
+                      },
+                    ),
+                  ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
             //   children: [

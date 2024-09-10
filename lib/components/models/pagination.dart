@@ -10,7 +10,7 @@ class Pagination {
   get totalPage => product.categories = pages;
   get currentCount => (pages.length / perPage).ceil();
 
-  void setpageIndex(int newIndex) {
+  set pageIndex(int newIndex) {
     initialPage = newIndex;
   }
 }
