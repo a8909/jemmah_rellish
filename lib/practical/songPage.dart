@@ -14,7 +14,9 @@ class SongPage extends StatefulWidget {
 
 class _SongPageState extends State<SongPage> {
   final SongModel sngmodel = SongModel();
+  final GlobalColors _color = GlobalColors();
   late var _playingList;
+  bool favourite = false;
 
   @override
   void initState() {
@@ -55,7 +57,9 @@ class _SongPageState extends State<SongPage> {
                 padding: const EdgeInsets.fromLTRB(5, 30, 5, 5),
                 child: Column(
                   children: [
-                    Image.asset(_playingList.albumImgPath),
+                    Hero(
+                        tag: _playingList.albumImgPath,
+                        child: Image.asset(_playingList.albumImgPath)),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
@@ -74,9 +78,18 @@ class _SongPageState extends State<SongPage> {
                               )
                             ],
                           ),
-                          const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                favourite = !favourite;
+                              });
+                            },
+                            child: Icon(
+                              favourite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                              color: favourite ? _color.danger : Colors.black,
+                            ),
                           )
                         ],
                       ),
@@ -139,6 +152,7 @@ class _SongPageState extends State<SongPage> {
                           child: GestureDetector(
                               onTap: () {
                                 setState(() {
+                                  sngmodel.isPlaying = !sngmodel.isPlaying;
                                   sngmodel.pauseResume(_playingList.audioPath);
                                 });
                               },

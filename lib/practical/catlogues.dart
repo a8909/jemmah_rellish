@@ -5,6 +5,7 @@ import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/pagination.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
 class Cartlogues extends StatefulWidget {
@@ -20,6 +21,7 @@ class _CartloguesState extends State<Cartlogues> {
   final Pagination pagination = Pagination();
   final GlobalColors color = GlobalColors();
   final TextEditingController _serchController = TextEditingController();
+  // final GlobalColors _color = GlobalColors();
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
@@ -71,7 +73,6 @@ class _CartloguesState extends State<Cartlogues> {
 
       crt.onAdd(cart);
       showModal(addItem.imagePath, addItem.name);
-      print(crt.shopCart);
     });
   }
 
@@ -91,11 +92,16 @@ class _CartloguesState extends State<Cartlogues> {
     });
   }
 
+  int _startpage = 0;
+  int _endpage = 0;
+  List pageCount = [];
+
   @override
   void initState() {
     super.initState();
     items = crt.categories;
-    print(items);
+    _startpage = (pagination.initialPage - 1) * pagination.perPage + 1;
+    _endpage = _startpage + pagination.perPage;
   }
 
   void onSearch(String search) {
@@ -186,7 +192,13 @@ class _CartloguesState extends State<Cartlogues> {
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
             items.isEmpty
-                ? const Text('Enter a vaild search entry')
+                ? const AnimatedOpacity(
+                    opacity: 0.5,
+                    curve: Curves.ease,
+                    duration: Duration(seconds: 2000),
+                    child: Text(
+                      'Enter a vaild search entry',
+                    ))
                 : Expanded(
                     child: GridView.builder(
                       itemCount: items.length,
@@ -214,14 +226,39 @@ class _CartloguesState extends State<Cartlogues> {
             //             : () {
             //                 onPrevious();
             //               },
-            //         'Previous'),
+            //         'Previous',
+            //         pagination.initialPage == 1
+            //             ? _color.disable
+            //             : _color.success),
+            //     // GestureDetector(
+            //     //     onTap: () {
+            //     //       for (var p in pageCount) {
+            //     //         setState(() {
+            //     //           currentPageIndex = pagination.pageIndex = p;
+            //     //         });
+            //     //       }
+            //     //     },
+            //     //     child: Container(
+            //     //       decoration: BoxDecoration(
+            //     //           color: pagination.currentPage == currentPageIndex
+            //     //               ? _color.success
+            //     //               : Colors.transparent,
+            //     //           borderRadius:
+            //     //               const BorderRadius.all(Radius.circular(10))),
+            //     //       child: Text(
+            //     //         '$currentPageIndex',
+            //     //       ),
+            //     //     )),
             //     cusButton(
-            //         pagination.initialPage == pagination.pages.length - 1
+            //         pagination.initialPage == pageCount.length - 1
             //             ? null
             //             : () {
             //                 onNext();
             //               },
-            //         'Next')
+            //         'Next',
+            //         pagination.initialPage == pageCount.length - 1
+            //             ? _color.disable
+            //             : _color.success)
             //   ],
             // )
           ],

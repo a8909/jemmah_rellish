@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
+import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/pagination.dart';
 
 class DisplayCart extends StatefulWidget {
@@ -13,15 +17,29 @@ class DisplayCart extends StatefulWidget {
 
 class _DisplayCartState extends State<DisplayCart> {
   final Pagination pagination = Pagination();
+  final GlobalColors _color = GlobalColors();
+  final CartItems product = CartItems();
+
+  int totalPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    totalPage = product.categories.length;
+    // pageCount = Array((totalPage / pagination.perPage).ceil()) as List;
+    // pageCount.map((i) {
+    //   i + 1;
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8, right: 5),
       width: 100,
-      decoration: BoxDecoration(
-          color: Colors.grey.shade400,
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
+      decoration: const BoxDecoration(
+          color: Color.fromRGBO(189, 189, 189, 1),
+          borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 20),
         child: Column(
@@ -45,9 +63,9 @@ class _DisplayCartState extends State<DisplayCart> {
               children: [
                 Text('\$${widget.cart.price}'),
                 Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  decoration: BoxDecoration(
+                      color: _color.success,
+                      borderRadius: const BorderRadius.all(Radius.circular(8))),
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Row(
@@ -74,11 +92,10 @@ class _DisplayCartState extends State<DisplayCart> {
   }
 }
 
-Container cusButton(Function()? onTap, String cusText) {
+Container cusButton(Function()? onTap, String cusText, Color color) {
   return Container(
-    decoration: const BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.all(Radius.circular(8))),
+    decoration: BoxDecoration(
+        color: color, borderRadius: const BorderRadius.all(Radius.circular(8))),
     child: Padding(
       padding: const EdgeInsets.all(5),
       child: Row(

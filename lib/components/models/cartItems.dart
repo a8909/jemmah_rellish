@@ -61,5 +61,5 @@ class CartItems {
     currentlyShopping = newshop;
   }
 
-  get shopping => currentlyShopping;
+   get shopping => currentlyShopping;
 }

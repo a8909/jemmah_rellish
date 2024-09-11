@@ -27,7 +27,9 @@ class _SongState extends State<Song> {
           itemBuilder: (context, index) {
             final Songs s = sng.songs[index];
             return ListTile(
-              leading: Image.asset(s.albumImgPath),
+              leading: Hero(
+                tag: s.albumImgPath,
+                child: Image.asset(s.albumImgPath)),
               title: Text(s.songName),
               subtitle: Text(s.artistName),
               onTap: () {

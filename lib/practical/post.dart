@@ -165,7 +165,8 @@ class _PostsState extends State<Posts> {
                         height: 16,
                       ),
                       displayImage
-                          ? Image.file(
+                          ? 
+                          Image.file(
                               img!,
                               fit: BoxFit.cover,
                               width: 160,

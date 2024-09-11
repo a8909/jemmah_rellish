@@ -11,12 +11,12 @@ class SongModel {
         songName: 'Stronger',
         artistName: 'Young jonn',
         albumImgPath: 'assets/image/youngJonn.jpeg',
-        audioPath: 'Young-Jonn-Stronger-(TrendyBeatz.com).mp3'),
+        audioPath: 'assets/audios/Young-Jonn-Stronger-(TrendyBeatz.com).mp3'),
     Songs(
         songName: 'Higher',
         artistName: 'Burna boy',
         albumImgPath: 'assets/image/burna.jpeg',
-        audioPath: 'Burna-Boy-Higher-(TrendyBeatz.com).mp3'),
+        audioPath: 'assets/audios/Burna-Boy-Higher-(TrendyBeatz.com).mp3'),
     Songs(
         songName: 'Awolowo',
         artistName: 'Passenger',
@@ -71,7 +71,6 @@ class SongModel {
   // Duration? _position;
 
   void play(String path) async {
-    isPlaying = true;
     await audioplayer.play(AssetSource(path));
   }
 
