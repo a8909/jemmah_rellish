@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/practical/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -10,9 +11,9 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _onWelcome();
+   _onWelcome();
   }
 
   _onWelcome() async {

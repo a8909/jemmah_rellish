@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,13 +15,14 @@ class ServiceWorker {
           "Content-type": "application/json",
           "Accept": "application/json"
         });
+        print('body:$body');
 
     try {
-      // prefs.setString('Auth', jsonDecode(response.body));
       return response.statusCode == 200
           ? jsonDecode(response.body)
           : 'Request failed!';
     } catch (e) {
+      print('>>>>>$e');
       throw Exception(e);
     }
   }

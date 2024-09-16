@@ -25,7 +25,7 @@ class Localstorage {
 
   getPost(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.getStringList(key);
+    prefs.getStringList(key) ?? 'no added post yet';
   }
 
   getData(key) async {

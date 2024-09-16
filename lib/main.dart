@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _getusrPref();
   }
 
   _getusrPref() async {
@@ -52,12 +53,11 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) =>
-            _getusrPref() == 'auth is empty' ? const Splash() : const Login(),
+        '/': (context) => const Splash(),
         login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
-        pswrd: (context) => Forgot(),
+        forgetpswrd: (context) => Forgot(),
         notifi: (context) => const Not(),
         sign: (context) => Signup(),
         '/carts': (context) => const CartList(),

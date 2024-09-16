@@ -38,7 +38,7 @@ class _PostsState extends State<Posts> {
     });
   }
 
-  onCreatePost() async {
+  onCreatePost() {
     UsrPost postRev = UsrPost(
         img: _sngImg, name: 'Jacob Brilliant', comment: _controller.text);
     if (postRev.img.isEmpty || postRev.comment.isEmpty) {
@@ -47,24 +47,26 @@ class _PostsState extends State<Posts> {
     }
     setState(() {
       postArray.userPost.add(postRev);
+      List<String> savepost = postArray.userPost
+          .map((eachPost) => jsonEncode(eachPost.tojson()))
+          .toList();
+      final posting = _storage.savepostUpdate('pst', savepost);
+      print('posting: $posting');
+      _controller.clear();
+      displayImage = false;
     });
-    List<String> savepost = postArray.userPost
-        .map((eachPost) => jsonEncode(eachPost.tojson()))
-        .toList();
-    final posting = await _storage.savepostUpdate('pst', savepost);
-    print('posting: $posting');
-    _controller.clear();
-    displayImage = false;
+
     Navigator.pop(context);
   }
 
   void _getReviews() async {
     List<String>? userPost = await _storage.getPost('pst');
-    if (postArray.userPost.isNotEmpty || userPost != null) {
+    if (userPost != null) {
       setState(() {
         userPost?.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
       });
     }
+    userPost = [];
   }
 
   @override
@@ -165,8 +167,7 @@ class _PostsState extends State<Posts> {
                         height: 16,
                       ),
                       displayImage
-                          ? 
-                          Image.file(
+                          ? Image.file(
                               img!,
                               fit: BoxFit.cover,
                               width: 160,

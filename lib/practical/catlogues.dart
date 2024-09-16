@@ -5,6 +5,7 @@ import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/pagination.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/practical/cartList.dart';
 
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -72,6 +73,7 @@ class _CartloguesState extends State<Cartlogues> {
           content: addItem.content);
 
       crt.onAdd(cart);
+      print('shopList: ${crt.shopCart.length}');
       showModal(addItem.imagePath, addItem.name);
     });
   }

@@ -14,16 +14,12 @@ class CartList extends StatefulWidget {
 final itms = CartItems();
 Localstorage storage = Localstorage();
 void payNow() {}
-var _individualItem;
 final GlobalColors _color = GlobalColors();
 
 class _CartListState extends State<CartList> {
   @override
   void initState() {
     super.initState;
-    print('shopping index:${itms.shopping}');
-    final int  productIndex = itms.shopping;
-    _individualItem = itms.shop[productIndex];
   }
 
   @override
@@ -61,8 +57,7 @@ class _CartListState extends State<CartList> {
                         itemCount: itms.shopCart.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          // final singlecart = itms.shop[index];
-                          final singlecart = _individualItem[index];
+                          final singlecart = itms.shopCart[index];
                           return Container(
                             margin: const EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(

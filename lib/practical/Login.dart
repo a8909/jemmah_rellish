@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/components/services/googleAuth.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 
 import '../components/services/server.dart';
@@ -21,9 +23,11 @@ class _LoginState extends State<Login> {
   bool box = true;
   bool isLoggedIn = false;
   bool status = false;
-  var errorMessage;
+  var errorMessage = '';
   String password = '';
   bool stateChecker = false;
+  final GlobalColors _color = GlobalColors();
+  final GoogleAuthentication _gAuth = GoogleAuthentication();
 
   @override
   void initState() {
@@ -128,24 +132,27 @@ class _LoginState extends State<Login> {
                     const Spacer(),
                     TextButton(
                         onPressed: () {
-                          // final body = {
-                          //   'email': _controller.text,
-                          //   'password': _pwdController.text
-                          // };
-                          // services.signUP(body);
-                          _controller.clear();
-                          _pwdController.clear();
-                          setState(() {
-                            isLoggedIn = !isLoggedIn;
-                            bool switchMode = sng.lightMode = !sng.lightMode;
-                            sng.currentMode(switchMode);
-                          });
+                          final body = {
+                            'email': _controller.text,
+                            'password': _pwdController.text
+                          };
+                          services.signUP(body).catchError(
+                            (err) {
+                              print('errormessage is :$err');
+                            },
+                            test: (error) {
+                              return throw Exception(error);
+                            },
+                          ).whenComplete(
+                            () {
+                              _controller.clear();
+                              _pwdController.clear();
+                            },
+                          );
 
                           // Navigator.of(context).pushNamed('/SignUp');
                         },
-                        child: isLoggedIn == false
-                            ? const Text('Sign up')
-                            : const Text('Login'))
+                        child: const Text('Sign up'))
                   ],
                 ),
 
@@ -202,40 +209,45 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.white),
                             )),
                 ),
-                // errorMessage.toString().isEmpty
-                //     ? const SizedBox.shrink()
-                //     : Text(
-                //         errorMessage.toString(),
-                //         style: const TextStyle(color: Colors.red),
-                //       ),
+                errorMessage.toString().isEmpty
+                    ? const SizedBox.shrink()
+                    : Text(
+                        errorMessage.toString(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
 
                 // errorMessage should be displayed here
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/Password');
+                        Navigator.of(context).pushNamed('/forgetPassword');
                       },
-                      child: const Text(
+                      child: Text(
                         'Forget password',
-                        // style: TextStyle(color: Colors.red),
+                        style: TextStyle(color: _color.danger),
                       )),
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(1),
-                        )),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Center(
-                        child: Image.asset('assets/image/google.png',
-                            width: 50, height: 50),
+                GestureDetector(
+                  onTap: () {
+                    _gAuth.signInwithGoogle();
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(1),
+                          )),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Image.asset('assets/image/google.png',
+                              width: 50, height: 50),
+                        ),
                       ),
                     ),
                   ),
