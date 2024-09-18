@@ -5,7 +5,6 @@ import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/pagination.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
-import 'package:jemmah_rellish/practical/cartList.dart';
 
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -20,15 +19,15 @@ class _CartloguesState extends State<Cartlogues> {
   final clr = SongModel();
   Localstorage storage = Localstorage();
   final Pagination pagination = Pagination();
-  final GlobalColors color = GlobalColors();
+  final GlobalColors _color = GlobalColors();
   final TextEditingController _serchController = TextEditingController();
-  // final GlobalColors _color = GlobalColors();
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
   int cartCount = 0;
   get _itemcount => cartCount;
   List items = [];
+  int pageCount = 0;
 
   void showModal(String productImage, String productName) {
     showDialog(
@@ -46,7 +45,7 @@ class _CartloguesState extends State<Cartlogues> {
                 Text('$productName has been successfully added to cart'),
                 const SizedBox(height: 5),
                 MaterialButton(
-                  color: color.success,
+                  color: _color.success,
                   child: const Text('ok'),
                   onPressed: () {
                     Navigator.pop(context);
@@ -82,6 +81,13 @@ class _CartloguesState extends State<Cartlogues> {
     Navigator.pushNamed(context, '/carts');
   }
 
+  @override
+  void initState() {
+    super.initState();
+    items = crt.categories;
+    _updatePagination();
+  }
+
   void onPrevious() {
     setState(() {
       pagination.pageIndex = pagination.initialPage - 1;
@@ -94,16 +100,16 @@ class _CartloguesState extends State<Cartlogues> {
     });
   }
 
-  int _startpage = 0;
-  int _endpage = 0;
-  List pageCount = [];
+  void _updatePagination() {
+    pagination.totalItem = items.length;
+    pageCount = pagination.totalPage =
+        (pagination.totalItem / pagination.perPage).ceil();
+  }
 
-  @override
-  void initState() {
-    super.initState();
-    items = crt.categories;
-    _startpage = (pagination.initialPage - 1) * pagination.perPage + 1;
-    _endpage = _startpage + pagination.perPage;
+  List getPaginatedItem() {
+    int start = (pagination.initialPage - 1) * pagination.perPage;
+    int end = start + pagination.perPage;
+    return items.sublist(start, end > items.length ? items.length : end);
   }
 
   void onSearch(String search) {
@@ -117,11 +123,13 @@ class _CartloguesState extends State<Cartlogues> {
           return queryList;
         }).toList();
       }
+      _updatePagination();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    List paginatedItems = getPaginatedItem();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
@@ -196,22 +204,21 @@ class _CartloguesState extends State<Cartlogues> {
             items.isEmpty
                 ? const AnimatedOpacity(
                     opacity: 0.5,
-                    curve: Curves.ease,
+                    curve: Curves.easeIn,
                     duration: Duration(seconds: 2000),
                     child: Text(
                       'Enter a vaild search entry',
                     ))
                 : Expanded(
                     child: GridView.builder(
-                      itemCount: items.length,
+                      itemCount: paginatedItems.length,
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2),
                       itemBuilder: (context, index) {
                         return DisplayCart(
-                          cart: items[index],
-                          // cart: pagination.totalPage[index],
+                          cart: paginatedItems[index],
                           onTap: () {
                             addToCart(index);
                           },
@@ -219,50 +226,35 @@ class _CartloguesState extends State<Cartlogues> {
                       },
                     ),
                   ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     cusButton(
-            //         pagination.initialPage == 1
-            //             ? null
-            //             : () {
-            //                 onPrevious();
-            //               },
-            //         'Previous',
-            //         pagination.initialPage == 1
-            //             ? _color.disable
-            //             : _color.success),
-            //     // GestureDetector(
-            //     //     onTap: () {
-            //     //       for (var p in pageCount) {
-            //     //         setState(() {
-            //     //           currentPageIndex = pagination.pageIndex = p;
-            //     //         });
-            //     //       }
-            //     //     },
-            //     //     child: Container(
-            //     //       decoration: BoxDecoration(
-            //     //           color: pagination.currentPage == currentPageIndex
-            //     //               ? _color.success
-            //     //               : Colors.transparent,
-            //     //           borderRadius:
-            //     //               const BorderRadius.all(Radius.circular(10))),
-            //     //       child: Text(
-            //     //         '$currentPageIndex',
-            //     //       ),
-            //     //     )),
-            //     cusButton(
-            //         pagination.initialPage == pageCount.length - 1
-            //             ? null
-            //             : () {
-            //                 onNext();
-            //               },
-            //         'Next',
-            //         pagination.initialPage == pageCount.length - 1
-            //             ? _color.disable
-            //             : _color.success)
-            //   ],
-            // )
+            items.isEmpty
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      cusButton(
+                          pagination.initialPage == 1
+                              ? null
+                              : () {
+                                  onPrevious();
+                                },
+                          'Previous',
+                          pagination.initialPage == 1
+                              ? _color.disable
+                              : _color.success),
+                      Text('${pagination.initialPage} of $pageCount'),
+                      cusButton(
+                          pagination.initialPage == items.length - 1
+                              ? null
+                              : () {
+                                  onNext();
+                                },
+                          'Next',
+                          pagination.initialPage == items.length - 1
+                              ? _color.disable
+                              : _color.success)
+                    ],
+                  )
           ],
         ),
       ),

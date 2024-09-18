@@ -1,10 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:jemmah_rellish/components/models/cartItems.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
-import 'package:jemmah_rellish/components/models/pagination.dart';
 
 class DisplayCart extends StatefulWidget {
   final Cart cart;
@@ -16,21 +12,7 @@ class DisplayCart extends StatefulWidget {
 }
 
 class _DisplayCartState extends State<DisplayCart> {
-  final Pagination pagination = Pagination();
   final GlobalColors _color = GlobalColors();
-  final CartItems product = CartItems();
-
-  int totalPage = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    totalPage = product.categories.length;
-    // pageCount = Array((totalPage / pagination.perPage).ceil()) as List;
-    // pageCount.map((i) {
-    //   i + 1;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {

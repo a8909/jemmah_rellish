@@ -12,14 +12,15 @@ import 'package:jemmah_rellish/practical/notification.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:jemmah_rellish/practical/sign.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:jemmah_rellish/practical/explore.dart';
 
 import 'practical/cartList.dart';
 import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
+
+
 void main() {
-  // InternetConnection().checkConnection();
+  // InternetConnection().checkConnection(BuildContext);
   runApp(MyApp());
 }
 

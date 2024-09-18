@@ -187,7 +187,6 @@ class _LoginState extends State<Login> {
                                   if (error.error.error['message']) {
                                     errorMessage = 'An error occurred';
                                   }
-                                  return errorMessage;
                                 },
                               ).whenComplete(() {
                                 setState(() {

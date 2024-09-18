@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jemmah_rellish/main.dart';
 import 'package:jemmah_rellish/practical/catlogues.dart';
 import 'package:jemmah_rellish/practical/post.dart';
@@ -13,6 +14,14 @@ class Screens extends StatefulWidget {
 }
 
 class _ScreensState extends State<Screens> {
+  bool isbottomBar = false;
+
+  void _stateChange(bool param) {
+    setState(() {
+      isbottomBar = param;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +43,7 @@ class _ScreensState extends State<Screens> {
   }
 }
 
-enum Menus { home, add, profile, music, catlogues }
+enum Menus { home, post, profile, music, catlogues }
 
 final pages = [
   const Jehma(),
@@ -66,28 +75,28 @@ class MybottomNavigator extends StatelessWidget {
         ),
         BottomNavigationBarItem(
             icon: IconButton(
-                onPressed: () => onTap(Menus.add),
+                onPressed: () => onTap(Menus.post),
                 icon: const Icon(Icons.add),
-                color: currentIndex == Menus.add
+                color: currentIndex == Menus.post
                     ? Colors.black
                     : Colors.black.withOpacity(0.3)),
-            label: 'add'),
-        BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () => onTap(Menus.profile),
-                icon: const Icon(Icons.person_pin),
-                color: currentIndex == Menus.profile
-                    ? Colors.black
-                    : Colors.black.withOpacity(0.3)),
-            label: 'me'),
-        BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () => onTap(Menus.music),
-                icon: const Icon(Icons.headphones_rounded),
-                color: currentIndex == Menus.music
-                    ? Colors.black
-                    : Colors.black.withOpacity(0.3)),
-            label: 'music'),
+            label: 'post'),
+        // BottomNavigationBarItem(
+        //     icon: IconButton(
+        //         onPressed: () => onTap(Menus.profile),
+        //         icon: const Icon(Icons.person_pin),
+        //         color: currentIndex == Menus.profile
+        //             ? Colors.black
+        //             : Colors.black.withOpacity(0.3)),
+        //     label: 'me'),
+        // BottomNavigationBarItem(
+        //     icon: IconButton(
+        //         onPressed: () => onTap(Menus.music),
+        //         icon: const Icon(Icons.headphones_rounded),
+        //         color: currentIndex == Menus.music
+        //             ? Colors.black
+        //             : Colors.black.withOpacity(0.3)),
+        //     label: 'music'),
         BottomNavigationBarItem(
             icon: IconButton(
                 onPressed: () => onTap(Menus.catlogues),
@@ -98,7 +107,7 @@ class MybottomNavigator extends StatelessWidget {
             label: 'cart'),
       ],
       showSelectedLabels: true,
-      showUnselectedLabels: false,
+      showUnselectedLabels: true,
       backgroundColor: const Color.fromARGB(255, 140, 152, 172),
     );
   }

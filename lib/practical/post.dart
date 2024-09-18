@@ -63,7 +63,8 @@ class _PostsState extends State<Posts> {
     List<String>? userPost = await _storage.getPost('pst');
     if (userPost != null) {
       setState(() {
-        userPost?.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
+        postArray.userPost =
+            userPost!.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
       });
     }
     userPost = [];
