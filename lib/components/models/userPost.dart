@@ -7,7 +7,7 @@ class UsrPost {
   factory UsrPost.fromJson(Map<String, dynamic> json) =>
       UsrPost(img: json['img'], name: json['name'], comment: json['comment']);
 
-  Map<String, dynamic> tojson() {
-    return {'image': img, 'singleName': name, 'singleComment': comment};
+  Map<String, dynamic> toJson() {
+    return {'img': img, 'name': name, 'comment': comment};
   }
 }

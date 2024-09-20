@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/main.dart';
 import 'package:jemmah_rellish/practical/catlogues.dart';
 import 'package:jemmah_rellish/practical/post.dart';
@@ -14,17 +15,12 @@ class Screens extends StatefulWidget {
 }
 
 class _ScreensState extends State<Screens> {
-  bool isbottomBar = false;
-
-  void _stateChange(bool param) {
-    setState(() {
-      isbottomBar = param;
-    });
-  }
+  // final Scroller _scroller = Scroller();
 
   @override
   void initState() {
     super.initState();
+    // _scroller.onScroll();
   }
 
   Menus currentIndex = Menus.home;
@@ -32,13 +28,17 @@ class _ScreensState extends State<Screens> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex.index],
-      bottomNavigationBar: MybottomNavigator(
-          onTap: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-          },
-          currentIndex: currentIndex),
+      bottomNavigationBar:
+          //  _scroller.scroll
+          //     ? const SizedBox.shrink()
+          //     :
+          MybottomNavigator(
+              onTap: (value) {
+                setState(() {
+                  currentIndex = value;
+                });
+              },
+              currentIndex: currentIndex),
     );
   }
 }
@@ -47,7 +47,7 @@ enum Menus { home, post, profile, music, catlogues }
 
 final pages = [
   const Jehma(),
-  Posts(),
+  const Posts(),
   const Insta(),
   const Song(),
   const Cartlogues()

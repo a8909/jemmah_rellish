@@ -23,9 +23,9 @@ class Localstorage {
     return upd;
   }
 
-  getPost(String key) async {
+  Future<List<String>?> getPost(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getStringList(key) ?? 'no added post yet';
+    return prefs.getStringList(key) ?? [];
   }
 
   getData(key) async {
@@ -48,8 +48,8 @@ class Localstorage {
     await db.setInt(key, value);
   }
 
-  savedTooltips(String key) async {
+  Future<int?> savedTooltips(String key) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.getInt(key);
+    return pref.getInt(key);
   }
 }

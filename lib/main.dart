@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
+import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/components/services/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/components/controller/internetConnection.dart';
@@ -17,15 +16,13 @@ import 'practical/cartList.dart';
 import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
-
-
-void main() {
-  // InternetConnection().checkConnection(BuildContext);
-  runApp(MyApp());
+void main() async {
+  runApp(const MyApp());
+  await InternetConnection().checkConnection();
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -144,11 +141,13 @@ class _JehmaState extends State<Jehma> {
   }
 
   final Localstorage localstorage = Localstorage();
+  // final Scroller _scroller = Scroller();
   @override
   void initState() {
     super.initState();
     _slider();
     getpref();
+    // _scroller.onScroll();
   }
 
   getpref() async {
@@ -208,6 +207,7 @@ class _JehmaState extends State<Jehma> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
+                        // controller: _scroller.scrollController,
                         itemCount: user.length,
                         itemBuilder: (context, index) {
                           return Items(
@@ -229,7 +229,7 @@ class _JehmaState extends State<Jehma> {
   }
 }
 
-_Items(String images, String recepie, String price) {
+Widget _Items(String images, String recepie, String price) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
     child: Container(

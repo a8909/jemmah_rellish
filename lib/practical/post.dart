@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jemmah_rellish/components/allPost.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
+import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/components/models/userPost.dart';
 
 import '../components/models/postArray.dart';
@@ -20,6 +21,7 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> {
   final TextEditingController _controller = TextEditingController();
   GlobalColors clr = GlobalColors();
+  // final Scroller _scroller = Scroller();
   File? img;
   String _sngImg = "";
   bool displayImage = false;
@@ -38,7 +40,7 @@ class _PostsState extends State<Posts> {
     });
   }
 
-  onCreatePost() {
+  onCreatePost() async {
     UsrPost postRev = UsrPost(
         img: _sngImg, name: 'Jacob Brilliant', comment: _controller.text);
     if (postRev.img.isEmpty || postRev.comment.isEmpty) {
@@ -47,33 +49,35 @@ class _PostsState extends State<Posts> {
     }
     setState(() {
       postArray.userPost.add(postRev);
-      List<String> savepost = postArray.userPost
-          .map((eachPost) => jsonEncode(eachPost.tojson()))
-          .toList();
-      final posting = _storage.savepostUpdate('pst', savepost);
-      print('posting: $posting');
       _controller.clear();
       displayImage = false;
     });
+    List<String> savepost = postArray.userPost
+        .map((eachPost) => jsonEncode(eachPost.toJson()))
+        .toList();
+    final posting = await _storage.savepostUpdate('pst', savepost);
+    print('posting: $posting');
 
     Navigator.pop(context);
   }
 
-  void _getReviews() async {
+  _getReviews() async {
     List<String>? userPost = await _storage.getPost('pst');
     if (userPost != null) {
       setState(() {
         postArray.userPost =
             userPost!.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
       });
+      return postArray.userPost;
     }
-    userPost = [];
+    return userPost = [];
   }
 
   @override
   void initState() {
     super.initState();
     _getReviews();
+    // _scroller.onScroll();
   }
 
   @override
@@ -219,6 +223,7 @@ class _PostsState extends State<Posts> {
           children: <Widget>[
             Expanded(
               child: ListView.separated(
+                  // controller: _scroller.onScroll(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return AllPost(usp: postArray.singlePost[index]);

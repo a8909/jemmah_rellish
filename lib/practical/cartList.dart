@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
+import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -12,7 +15,7 @@ class CartList extends StatefulWidget {
 }
 
 final itms = CartItems();
-Localstorage storage = Localstorage();
+Localstorage _storage = Localstorage();
 void payNow() {}
 final GlobalColors _color = GlobalColors();
 
@@ -20,6 +23,20 @@ class _CartListState extends State<CartList> {
   @override
   void initState() {
     super.initState;
+    _productCartList();
+  }
+
+  _productCartList() async {
+    List<String>? cartList = await _storage.getPost('productKey');
+    if (cartList == null) {
+      return cartList = [];
+    } else {
+      setState(() {
+        itms.shopCart =
+            cartList!.map((p) => Cart.fromJson(jsonDecode(p))).toList();
+      });
+      return itms.shopCart;
+    }
   }
 
   @override

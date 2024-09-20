@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/cartItems.dart';
@@ -70,10 +72,24 @@ class _CartloguesState extends State<Cartlogues> {
           name: addItem.name,
           price: addItem.price,
           content: addItem.content);
-
       crt.onAdd(cart);
-      print('shopList: ${crt.shopCart.length}');
       showModal(addItem.imagePath, addItem.name);
+    });
+    List<String> product =
+        crt.shopCart.map((p) => jsonEncode(p.toJson())).toList();
+    final productKey = crt.saveProduct(product);
+    _onTooltipSave(_itemcount);
+    debugPrint('productKey : $productKey');
+  }
+
+  _onTooltipSave(int value) async {
+    await storage.saveTooltip(key: 'tipsKey', value: value);
+  }
+
+  _onLoadtoolTip() async {
+    int? savedCount = await storage.savedTooltips('tipsKey');
+    setState(() {
+      cartCount = savedCount ?? 0;
     });
   }
 
@@ -86,6 +102,7 @@ class _CartloguesState extends State<Cartlogues> {
     super.initState();
     items = crt.categories;
     _updatePagination();
+    _onLoadtoolTip();
   }
 
   void onPrevious() {
@@ -117,9 +134,8 @@ class _CartloguesState extends State<Cartlogues> {
       if (search.isEmpty) {
         items = crt.categories;
       } else {
-        items = crt.categories.where((s) {
-          final queryList = s.name.toLowerCase().contains(search.toLowerCase());
-          print('query of ${s.name}: $queryList');
+        items = crt.categories.where((q) {
+          final queryList = q.name.toLowerCase().contains(search.toLowerCase());
           return queryList;
         }).toList();
       }
@@ -244,13 +260,13 @@ class _CartloguesState extends State<Cartlogues> {
                               : _color.success),
                       Text('${pagination.initialPage} of $pageCount'),
                       cusButton(
-                          pagination.initialPage == items.length - 1
+                          pagination.initialPage == pageCount
                               ? null
                               : () {
                                   onNext();
                                 },
                           'Next',
-                          pagination.initialPage == items.length - 1
+                          pagination.initialPage == pageCount
                               ? _color.disable
                               : _color.success)
                     ],

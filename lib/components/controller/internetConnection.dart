@@ -1,41 +1,29 @@
-// import 'dart:async';
+import 'dart:async';
 
-// import 'package:connectivity_plus/connectivity_plus.dart';
-// import 'package:flutter/material.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
-// class InternetConnection {
-//   final Connectivity _connectivity = Connectivity();
-//   late StreamSubscription subscription;
-//   final Type context = BuildContext;
+class InternetConnection {
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription subscription;
+  bool isconnected = false;
+  set connectionState(bool param) {
+    isconnected = param;
+  }
 
-//   void checkConnection(context) {
-//     subscription =
-//         _connectivity.onConnectivityChanged.listen(_initializeConnection(context));
-//   }
-
-//   _initializeConnection(context)  {
-
-//     if (connectionStatus == ConnectivityResult.mobile) {
-//      _showSnackBar('Connection restored..', Icons.wifi, context);
-//     } else {
-//       if (connectionStatus == ConnectivityResult.none) {
-//         _showSnackBar('Connection lost..', Icons.wifi_off, context);
-       
-//       }
-//     }
-//   }
-
-//   void _showSnackBar(String message, IconData icon, context ) {
-//     final snackBar = SnackBar(
-//       content: Row(
-//         children: [
-//           Icon(icon),
-//           const SizedBox(width: 8),
-//           Expanded(child: Text(message)),
-//         ],
-//       ),
-//       duration: const Duration(seconds: 3),
-//     );
-//     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-//   }
-// }
+  checkConnection() {
+    subscription = _connectivity.onConnectivityChanged.listen(
+      (event) {
+        if (event == [ConnectivityResult.mobile]) {
+          print('Connected to mobile network');
+        } else if (event == ConnectivityResult.wifi) {
+          print('Connected to WiFi');
+        } else if (event == ConnectivityResult.none) {
+          print('No internet connection');
+        } else {
+          print('Unknown connection state: $event');
+          connectionState = false;
+        }
+      },
+    );
+  }
+}

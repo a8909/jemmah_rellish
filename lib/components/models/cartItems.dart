@@ -1,6 +1,8 @@
+import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/carts.dart';
 
 class CartItems {
+  final Localstorage _storage = Localstorage();
   List<Cart> categories = [
     Cart(
         imagePath: "assets/image/HE-1114.png",
@@ -36,18 +38,7 @@ class CartItems {
 
   get cartItems => categories;
 
-  List<Cart> shopCart = [
-    Cart(
-        imagePath: "assets/image/shaw.jpeg",
-        name: 'Shawamar',
-        price: "2000",
-        content: 'Taste nice and better'),
-    Cart(
-        imagePath: "assets/image/zobo.jpeg",
-        name: 'Zobo',
-        price: "2000",
-        content: 'Taste nice and better'),
-  ];
+  List<Cart> shopCart = [];
 
   void onAdd(Cart cart) {
     shopCart.add(cart);
@@ -61,5 +52,9 @@ class CartItems {
     currentlyShopping = newshop;
   }
 
-   get shopping => currentlyShopping;
+  get shopping => currentlyShopping;
+
+  saveProduct(List<String> value) async {
+    await _storage.savepostUpdate('productKey', value);
+  }
 }
