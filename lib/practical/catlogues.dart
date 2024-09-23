@@ -148,8 +148,7 @@ class _CartloguesState extends State<Cartlogues> {
     List paginatedItems = getPaginatedItem();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade200,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         elevation: 1,
         title: const Center(
             child: Text(
@@ -165,7 +164,7 @@ class _CartloguesState extends State<Cartlogues> {
                 },
                 icon: const Icon(
                   Icons.trolley,
-                  size: 30,
+                  size: 20,
                 ),
                 tooltip: _itemcount.toString(),
               ),
@@ -221,7 +220,7 @@ class _CartloguesState extends State<Cartlogues> {
                 ? const AnimatedOpacity(
                     opacity: 0.5,
                     curve: Curves.easeIn,
-                    duration: Duration(seconds: 2000),
+                    duration: Duration(seconds: 2),
                     child: Text(
                       'Enter a vaild search entry',
                     ))

@@ -3,14 +3,14 @@ import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/practical/Login.dart';
 
-class Insta extends StatefulWidget {
-  const Insta({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<Insta> createState() => _InstaState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _InstaState extends State<Insta> {
+class _ProfileState extends State<Profile> {
   List<String> gender = ['Male', 'Female'];
   bool state = false;
   String dropdownValue = 'Male';

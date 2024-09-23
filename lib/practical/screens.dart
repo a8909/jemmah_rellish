@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
+// import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/main.dart';
 import 'package:jemmah_rellish/practical/catlogues.dart';
 import 'package:jemmah_rellish/practical/post.dart';
@@ -48,7 +48,7 @@ enum Menus { home, post, profile, music, catlogues }
 final pages = [
   const Jehma(),
   const Posts(),
-  const Insta(),
+  const Profile(),
   const Song(),
   const Cartlogues()
 ];
@@ -76,7 +76,7 @@ class MybottomNavigator extends StatelessWidget {
         BottomNavigationBarItem(
             icon: IconButton(
                 onPressed: () => onTap(Menus.post),
-                icon: const Icon(Icons.add),
+                icon: const Icon(Icons.post_add_rounded),
                 color: currentIndex == Menus.post
                     ? Colors.black
                     : Colors.black.withOpacity(0.3)),
@@ -106,6 +106,7 @@ class MybottomNavigator extends StatelessWidget {
                     : Colors.black.withOpacity(0.3)),
             label: 'cart'),
       ],
+      type: BottomNavigationBarType.fixed,
       showSelectedLabels: true,
       showUnselectedLabels: true,
       backgroundColor: const Color.fromARGB(255, 140, 152, 172),

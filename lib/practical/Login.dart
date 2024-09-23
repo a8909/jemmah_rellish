@@ -28,6 +28,11 @@ class _LoginState extends State<Login> {
   bool stateChecker = false;
   final GlobalColors _color = GlobalColors();
   final GoogleAuthentication _gAuth = GoogleAuthentication();
+  set errorRequest(String message) {
+    setState(() {
+      errorMessage = message;
+    });
+  }
 
   @override
   void initState() {
@@ -187,20 +192,21 @@ class _LoginState extends State<Login> {
                                   if (error.error.error['message']) {
                                     errorMessage = 'An error occurred';
                                   }
+                                  return error;
                                 },
                               ).whenComplete(() {
                                 setState(() {
                                   status = false;
+                                  _controller.clear();
+                                  _pwdController.clear();
                                 });
-                                _controller.clear();
-                                _pwdController.clear();
                               });
                             },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF103B11),
                           disabledBackgroundColor:
                               const Color(0xFF103B11).withOpacity(0.5)),
-                      child: status == true
+                      child: status
                           ? const Text('checking',
                               style: TextStyle(color: Colors.white))
                           : const Text(
@@ -211,7 +217,7 @@ class _LoginState extends State<Login> {
                 errorMessage.toString().isEmpty
                     ? const SizedBox.shrink()
                     : Text(
-                        errorMessage.toString(),
+                        errorMessage,
                         style: const TextStyle(color: Colors.red),
                       ),
 

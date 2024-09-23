@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
@@ -8,8 +10,10 @@ import 'package:jemmah_rellish/onboardingScreens/splashScreen.dart';
 import 'package:jemmah_rellish/practical/forgotpass.dart';
 import 'package:jemmah_rellish/practical/login.dart';
 import 'package:jemmah_rellish/practical/notification.dart';
+import 'package:jemmah_rellish/practical/profile.dart';
 import 'package:jemmah_rellish/practical/screens.dart';
 import 'package:jemmah_rellish/practical/sign.dart';
+import 'package:jemmah_rellish/practical/song.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'practical/cartList.dart';
@@ -59,6 +63,8 @@ class _MyAppState extends State<MyApp> {
         notifi: (context) => const Not(),
         sign: (context) => Signup(),
         '/carts': (context) => const CartList(),
+        playList: (context) => const Song(),
+        profile: (context) => const Profile(),
       },
     );
   }
@@ -118,35 +124,37 @@ class _JehmaState extends State<Jehma> {
   ];
   final service = ServiceWorker();
   int sliderCounter = 0;
-  void _slider() async {
-    await Future.delayed(
-        const Duration(seconds: 3000),
-        () => {
-              if (sliderCounter == editor.length)
-                {sliderCounter = 0}
-              else
-                {
-                  sliderCounter++,
-                  Expanded(
-                      child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: title.length,
-                    itemBuilder: (context, index) {
-                      return sideshow(editor[index], title[index],
-                          content[index], authors[index]);
-                    },
-                  )),
-                }
-            });
+  final Localstorage localstorage = Localstorage();
+  late PageController pageController;
+  late Timer timer;
+  // final Scroller _scroller = Scroller();
+
+  void _startSlider() {
+    timer = Timer.periodic(
+      const Duration(seconds: 3),
+      (timer) {
+        setState(() {
+          sliderCounter = (sliderCounter + 1) % editor.length;
+        });
+        pageController.animateToPage(sliderCounter,
+            duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+      },
+    );
   }
 
-  final Localstorage localstorage = Localstorage();
-  // final Scroller _scroller = Scroller();
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+    pageController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-    _slider();
+    pageController = PageController();
     getpref();
+    _startSlider();
     // _scroller.onScroll();
   }
 
@@ -182,10 +190,15 @@ class _JehmaState extends State<Jehma> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
+                child: PageView.builder(
+              controller: pageController,
               scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
               itemCount: title.length,
+              onPageChanged: (value) {
+                setState(() {
+                  sliderCounter = value;
+                });
+              },
               itemBuilder: (context, index) {
                 return sideshow(editor[index], title[index], content[index],
                     authors[index]);
@@ -264,7 +277,7 @@ Padding sideshow(String editors, String title, String content, String author) {
       height: 400,
       width: 280,
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

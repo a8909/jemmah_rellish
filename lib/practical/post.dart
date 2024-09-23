@@ -6,8 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jemmah_rellish/components/allPost.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
-import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
+// import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/components/models/userPost.dart';
+import 'package:jemmah_rellish/practical/customDrawer.dart';
 
 import '../components/models/postArray.dart';
 
@@ -56,21 +57,21 @@ class _PostsState extends State<Posts> {
         .map((eachPost) => jsonEncode(eachPost.toJson()))
         .toList();
     final posting = await _storage.savepostUpdate('pst', savepost);
-    print('posting: $posting');
-
+    print('new post: $posting');
     Navigator.pop(context);
   }
 
   _getReviews() async {
-    List<String>? userPost = await _storage.getPost('pst');
-    if (userPost != null) {
+    List<String>? listUserPost = await _storage.getPost('pst');
+    if (listUserPost != null) {
       setState(() {
-        postArray.userPost =
-            userPost!.map((up) => UsrPost.fromJson(jsonDecode(up))).toList();
+        postArray.userPost = listUserPost!
+            .map((up) => UsrPost.fromJson(jsonDecode(up)))
+            .toList();
       });
       return postArray.userPost;
     }
-    return userPost = [];
+    return listUserPost = [];
   }
 
   @override
@@ -85,7 +86,10 @@ class _PostsState extends State<Posts> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {}, icon: const Icon(Icons.location_on_sharp)),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Icon(Icons.menu)),
         title: const Center(
           child: Text(
             'P o s t s',
@@ -100,6 +104,7 @@ class _PostsState extends State<Posts> {
               icon: const Icon(Icons.notifications))
         ],
       ),
+      drawer: CustomDrawer(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.tag),
         onPressed: () {
@@ -226,7 +231,7 @@ class _PostsState extends State<Posts> {
                   // controller: _scroller.onScroll(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return AllPost(usp: postArray.singlePost[index]);
+                    return AllPost(usp: postArray.userPost[index]);
                   },
                   separatorBuilder: (context, index) => const SizedBox(
                         height: 8,
