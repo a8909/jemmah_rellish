@@ -15,7 +15,7 @@ class ServiceWorker {
           "Content-type": "application/json",
           "Accept": "application/json"
         });
-        print('body:$body');
+    print('body:$body');
 
     try {
       return response.statusCode == 200
@@ -54,6 +54,18 @@ class ServiceWorker {
       }
     } catch (e) {}
     return result;
+  }
+
+  Future<dynamic> getProducts() async {
+    const url =
+        "https://Real-Time-Amazon-Data.proxy-production.allthingsdev.co/v2/products-by-category?category_id=2478868012&page=1&country=US&sort_by=RELEVANCE&product_condition=ALL&min_price=105&max_price=110&brand=null";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['data']['products'];
+    } else {
+      return throw Exception('failed to load post');
+    }
   }
 
   onHandleError(errorType) {

@@ -29,21 +29,21 @@ class _DisplayCartState extends State<DisplayCart> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              widget.cart.imagePath,
+              widget.cart.product_photo,
               height: 50,
               width: double.infinity,
             ),
             Center(
-              child: Text(widget.cart.content),
+              child: Text(widget.cart.delivery),
             ),
             Text(
-              widget.cart.name,
+              widget.cart.product_title,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('\$${widget.cart.price}'),
+                Text(widget.cart.product_price),
                 Container(
                   decoration: BoxDecoration(
                       color: _color.success,

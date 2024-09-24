@@ -7,6 +7,7 @@ import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/pagination.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
+import 'package:jemmah_rellish/components/services/server.dart';
 
 import 'package:jemmah_rellish/practical/diisplayCart.dart';
 
@@ -23,6 +24,7 @@ class _CartloguesState extends State<Cartlogues> {
   final Pagination pagination = Pagination();
   final GlobalColors _color = GlobalColors();
   final TextEditingController _serchController = TextEditingController();
+  final ServiceWorker _endPoint = ServiceWorker();
 
   CartItems crt = CartItems();
   bool isCartAdded = false;
@@ -30,6 +32,7 @@ class _CartloguesState extends State<Cartlogues> {
   get _itemcount => cartCount;
   List items = [];
   int pageCount = 0;
+  List populatedProduct = [];
 
   void showModal(String productImage, String productName) {
     showDialog(
@@ -68,12 +71,12 @@ class _CartloguesState extends State<Cartlogues> {
       crt.currentShop = index;
       var addItem = crt.categories[index];
       final cart = Cart(
-          imagePath: addItem.imagePath,
-          name: addItem.name,
-          price: addItem.price,
-          content: addItem.content);
+          product_photo: addItem.product_photo,
+          product_title: addItem.product_title,
+          product_price: addItem.product_price,
+          delivery: addItem.delivery);
       crt.onAdd(cart);
-      showModal(addItem.imagePath, addItem.name);
+      showModal(addItem.product_photo, addItem.product_title);
     });
     List<String> product =
         crt.shopCart.map((p) => jsonEncode(p.toJson())).toList();
@@ -100,9 +103,15 @@ class _CartloguesState extends State<Cartlogues> {
   @override
   void initState() {
     super.initState();
-    items = crt.categories;
+    _updateProducts();
+    // items = crt.categories;
+    items = populatedProduct;
     _updatePagination();
     _onLoadtoolTip();
+  }
+
+  void _updateProducts() async {
+    populatedProduct = await _endPoint.getProducts();
   }
 
   void onPrevious() {
@@ -132,10 +141,12 @@ class _CartloguesState extends State<Cartlogues> {
   void onSearch(String search) {
     setState(() {
       if (search.isEmpty) {
-        items = crt.categories;
+        // items = crt.categories;
+        items = populatedProduct;
       } else {
-        items = crt.categories.where((q) {
-          final queryList = q.name.toLowerCase().contains(search.toLowerCase());
+        items = populatedProduct.where((q) {
+          final queryList =
+              q['product_title'].toLowerCase().contains(search.toLowerCase());
           return queryList;
         }).toList();
       }
@@ -225,21 +236,33 @@ class _CartloguesState extends State<Cartlogues> {
                       'Enter a vaild search entry',
                     ))
                 : Expanded(
-                    child: GridView.builder(
-                      itemCount: paginatedItems.length,
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
-                      itemBuilder: (context, index) {
-                        return DisplayCart(
-                          cart: paginatedItems[index],
-                          onTap: () {
-                            addToCart(index);
-                          },
-                        );
-                      },
-                    ),
+                    child: FutureBuilder(
+                        future: _endPoint.getProducts(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.builder(
+                              itemCount: paginatedItems.length,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                                final productItems = snapshot.data;
+                                return DisplayCart(
+                                  cart: productItems[index],
+                                  onTap: () {
+                                    addToCart(index);
+                                  },
+                                );
+                              },
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          } else {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        }),
                   ),
             items.isEmpty
                 ? const SizedBox.shrink()

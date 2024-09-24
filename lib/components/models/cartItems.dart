@@ -5,35 +5,35 @@ class CartItems {
   final Localstorage _storage = Localstorage();
   List<Cart> categories = [
     Cart(
-        imagePath: "assets/image/HE-1114.png",
-        name: 'Shawamar',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/HE-1114.png",
+        product_title: 'Shawamar',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/zobo.jpeg",
-        name: 'Zobo',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/zobo.jpeg",
+        product_title: 'Zobo',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/shaw.jpeg",
-        name: 'Smotthie',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/shaw.jpeg",
+        product_title: 'Smotthie',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/smth.jpeg",
-        name: 'Cocktail',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/smth.jpeg",
+        product_title: 'Cocktail',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/shaw2.jpeg",
-        name: 'Shawamar',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/shaw2.jpeg",
+        product_title: 'Shawamar',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
     Cart(
-        imagePath: "assets/image/shaw.jpeg",
-        name: 'Shawamar',
-        price: "2000",
-        content: 'Taste nice and better'),
+        product_photo: "assets/image/shaw.jpeg",
+        product_title: 'Shawamar',
+        product_price: "2000",
+        delivery: 'Taste nice and better'),
   ];
 
   get cartItems => categories;
