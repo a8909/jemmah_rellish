@@ -34,6 +34,12 @@ class _LoginState extends State<Login> {
     });
   }
 
+  void googleRequest() {
+    // _gAuth.signInwithGoogle();
+    //if gAuth is available authticate with google else show coming soon
+    
+  }
+
   @override
   void initState() {
     super.initState();
@@ -234,9 +240,10 @@ class _LoginState extends State<Login> {
                       )),
                 ),
                 const SizedBox(height: 20),
+                //google sign in
                 GestureDetector(
                   onTap: () {
-                    _gAuth.signInwithGoogle();
+                    googleRequest();
                   },
                   child: Center(
                     child: Container(

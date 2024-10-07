@@ -8,6 +8,7 @@ class Cart {
       required this.product_title,
       required this.product_price,
       required this.delivery});
+      // this convert it to an object
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
       product_photo: json['product_photo'],
       product_title: json['product_title'],

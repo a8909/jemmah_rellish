@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class Items extends StatefulWidget {
   // final String child;
   final String image;
-  final String recepie;
+  final String category;
   final String price;
 
-  Items({required this.image, required this.recepie, required this.price});
+  Items({required this.image, required this.category, required this.price});
 
   @override
   State<Items> createState() => _ItemsState();
@@ -26,7 +26,7 @@ class _ItemsState extends State<Items> {
             radius: 20,
           ),
           const SizedBox(width: 5),
-          Text(widget.recepie),
+          Text(widget.category),
           const Spacer(),
           Text(widget.price)
         ],

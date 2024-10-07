@@ -13,15 +13,10 @@ class InternetConnection {
   checkConnection() {
     subscription = _connectivity.onConnectivityChanged.listen(
       (event) {
-        if (event == [ConnectivityResult.mobile]) {
-          print('Connected to mobile network');
-        } else if (event == ConnectivityResult.wifi) {
-          print('Connected to WiFi');
-        } else if (event == ConnectivityResult.none) {
-          print('No internet connection');
-        } else {
-          print('Unknown connection state: $event');
-          connectionState = false;
+        if (event ==  [ConnectivityResult.mobile]){
+          print('event is mobile');
+        }else{
+          print('event is : $event');
         }
       },
     );

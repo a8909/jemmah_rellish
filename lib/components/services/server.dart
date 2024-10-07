@@ -46,34 +46,38 @@ class ServiceWorker {
     Map<String, dynamic> result = {};
     try {
       String url = "http://127.0.0.1:5000/data_yen";
+      // String url = 'https://fakestoreapi.com/products';
       var svrResponse = await http.post(Uri.parse(url));
       if (svrResponse.statusCode == 200) {
         result = json.decode(svrResponse.body);
       } else {
         print(svrResponse.body);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return result;
   }
 
   Future<dynamic> getProducts() async {
+    var headers = {
+      'x-apihub-key': 'RKw9zJhderwcdVUwL19zi7FvntZ4YupfwKqyehFZlnLbKMWRdo',
+      'x-apihub-host': 'Real-Time-Amazon-Data.allthingsdev.co',
+      'x-apihub-endpoint': '2bdcdbad-e6a5-4d34-9d32-d5376691a986'
+    };
+
     const url =
-        "https://Real-Time-Amazon-Data.proxy-production.allthingsdev.co/v2/products-by-category?category_id=2478868012&page=1&country=US&sort_by=RELEVANCE&product_condition=ALL&min_price=105&max_price=110&brand=null";
-    final response = await http.get(Uri.parse(url));
+        'https://Real-Time-Amazon-Data.proxy-production.allthingsdev.co/v2/products-by-category?category_id=2478868012&page=1&country=US&sort_by=RELEVANCE&product_condition=ALL&min_price=105&max_price=110&brand=null';
+    final response = await http.get(Uri.parse(url), headers: headers);
+    // print('response: ${response.body}');
+    // print('response statusCode : ${response.statusCode}');
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['data']['products'];
+      var resData = jsonDecode(response.body)['data']['products'];
+      // print('resData : $resData');
+      return resData;
     } else {
       return throw Exception('failed to load post');
     }
-  }
-
-  onHandleError(errorType) {
-    switch (errorType) {
-      case 'INVALID_LOGIN_CREDENTIALS':
-        err = 'Invalid login';
-        break;
-    }
-    return err;
   }
 }

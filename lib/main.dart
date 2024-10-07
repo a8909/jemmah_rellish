@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
-import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
+// import 'package:jemmah_rellish/components/models/scrollCntrl.dart';
 import 'package:jemmah_rellish/components/services/server.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
 import 'package:jemmah_rellish/components/controller/internetConnection.dart';
@@ -224,8 +224,8 @@ class _JehmaState extends State<Jehma> {
                         itemCount: user.length,
                         itemBuilder: (context, index) {
                           return Items(
-                              image: 'assets/image/HE-1114.png',
-                              recepie: user[index],
+                              image: 'assets/image/shaw.jpeg',
+                              category: user[index],
                               price: amount[index]);
                         },
                       );

@@ -28,7 +28,7 @@ class _DisplayCartState extends State<DisplayCart> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
+            Image.network(
               widget.cart.product_photo,
               height: 50,
               width: double.infinity,

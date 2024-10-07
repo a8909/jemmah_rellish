@@ -105,13 +105,13 @@ class _CartloguesState extends State<Cartlogues> {
     super.initState();
     _updateProducts();
     // items = crt.categories;
-    items = populatedProduct;
     _updatePagination();
     _onLoadtoolTip();
   }
 
   void _updateProducts() async {
-    populatedProduct = await _endPoint.getProducts();
+    final products = await _endPoint.getProducts();
+    items = products;
   }
 
   void onPrevious() {
@@ -146,7 +146,7 @@ class _CartloguesState extends State<Cartlogues> {
       } else {
         items = populatedProduct.where((q) {
           final queryList =
-              q['product_title'].toLowerCase().contains(search.toLowerCase());
+              q.product_title.toLowerCase().contains(search.toLowerCase());
           return queryList;
         }).toList();
       }
@@ -156,7 +156,7 @@ class _CartloguesState extends State<Cartlogues> {
 
   @override
   Widget build(BuildContext context) {
-    List paginatedItems = getPaginatedItem();
+    getPaginatedItem();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade100,
@@ -227,43 +227,48 @@ class _CartloguesState extends State<Cartlogues> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
-            items.isEmpty
-                ? const AnimatedOpacity(
-                    opacity: 0.5,
-                    curve: Curves.easeIn,
-                    duration: Duration(seconds: 2),
-                    child: Text(
-                      'Enter a vaild search entry',
-                    ))
-                : Expanded(
-                    child: FutureBuilder(
-                        future: _endPoint.getProducts(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return GridView.builder(
-                              itemCount: paginatedItems.length,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemBuilder: (context, index) {
-                                final productItems = snapshot.data;
-                                return DisplayCart(
-                                  cart: productItems[index],
-                                  onTap: () {
-                                    addToCart(index);
-                                  },
-                                );
-                              },
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          } else {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                        }),
-                  ),
+            // _searchController.text.isEmpty
+            //     ? const AnimatedOpacity(
+            //         opacity: 0.5,
+            //         curve: Curves.easeInOut,
+            //         duration: Duration(seconds: 2),
+            //         child: Text(
+            //           'Enter a vaild search entry',
+            //         ))
+            //     :
+            Expanded(
+              child: FutureBuilder(
+                  future: _endPoint.getProducts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return GridView.builder(
+                        itemCount: snapshot.data.length,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2),
+                        itemBuilder: (context, index) {
+                          final productItems = snapshot.data;
+                          print('product index: ${snapshot.data[index]}');
+                          return DisplayCart(
+                            cart: Cart(
+                                product_photo: productItems[index].product_photo,
+                                product_title: productItems[index].product_title,
+                                product_price: productItems[index].product_price,
+                                delivery: productItems[index].delivery),
+                            onTap: () {
+                              addToCart(index);
+                            },
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('snapshot error is : ${snapshot.error}');
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }),
+            ),
             items.isEmpty
                 ? const SizedBox.shrink()
                 : Row(
