@@ -29,7 +29,7 @@ class _DisplayCartState extends State<DisplayCart> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(
-              widget.cart.product_photo,
+              widget.cart.productPhoto,
               height: 50,
               width: double.infinity,
             ),
@@ -37,13 +37,13 @@ class _DisplayCartState extends State<DisplayCart> {
               child: Text(widget.cart.delivery),
             ),
             Text(
-              widget.cart.product_title,
+              widget.cart.productTitle,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.cart.product_price),
+                Text(widget.cart.productPrice),
                 Container(
                   decoration: BoxDecoration(
                       color: _color.success,

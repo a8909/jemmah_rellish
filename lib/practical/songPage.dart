@@ -15,14 +15,13 @@ class SongPage extends StatefulWidget {
 class _SongPageState extends State<SongPage> {
   final SongModel sngmodel = SongModel();
   final GlobalColors _color = GlobalColors();
-  late var _playingList;
+  late var playingList;
   bool favourite = false;
 
   @override
   void initState() {
     super.initState();
-
-    _playingList = sngmodel.playlist[widget.index];
+    playingList = sngmodel.playlist[widget.index];
   }
 
   @override
@@ -58,8 +57,8 @@ class _SongPageState extends State<SongPage> {
                 child: Column(
                   children: [
                     Hero(
-                        tag: _playingList.albumImgPath,
-                        child: Image.asset(_playingList.albumImgPath)),
+                        tag: playingList.albumImgPath,
+                        child: Image.asset(playingList.albumImgPath)),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(
@@ -69,12 +68,12 @@ class _SongPageState extends State<SongPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _playingList.songName,
+                                playingList.songName,
                                 style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                _playingList.artistName,
+                                playingList.artistName,
                               )
                             ],
                           ),
@@ -136,8 +135,8 @@ class _SongPageState extends State<SongPage> {
                 Expanded(
                     child: GestureDetector(
                         onTap: () {},
-                        child: NeuBox(
-                            child: const Padding(
+                        child: const NeuBox(
+                            child: Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Icon(Icons.skip_previous),
                         )))),
@@ -153,7 +152,7 @@ class _SongPageState extends State<SongPage> {
                               onTap: () {
                                 setState(() {
                                   sngmodel.isPlaying = !sngmodel.isPlaying;
-                                  sngmodel.pauseResume(_playingList.audioPath);
+                                  sngmodel.pauseResume(playingList.audioPath);
                                 });
                               },
                               child: Icon(sngmodel.isPlaying
@@ -164,8 +163,8 @@ class _SongPageState extends State<SongPage> {
                 Expanded(
                     child: GestureDetector(
                         onTap: () {},
-                        child: NeuBox(
-                            child: const Padding(
+                        child: const NeuBox(
+                            child: Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Icon(Icons.skip_next),
                         )))),

@@ -71,12 +71,12 @@ class _CartloguesState extends State<Cartlogues> {
       crt.currentShop = index;
       var addItem = crt.categories[index];
       final cart = Cart(
-          product_photo: addItem.product_photo,
-          product_title: addItem.product_title,
-          product_price: addItem.product_price,
+          productPhoto: addItem.productPhoto,
+          productTitle: addItem.productTitle,
+          productPrice: addItem.productPrice,
           delivery: addItem.delivery);
       crt.onAdd(cart);
-      showModal(addItem.product_photo, addItem.product_title);
+      showModal(addItem.productPhoto, addItem.productTitle);
     });
     List<String> product =
         crt.shopCart.map((p) => jsonEncode(p.toJson())).toList();
@@ -252,9 +252,9 @@ class _CartloguesState extends State<Cartlogues> {
                           print('product index: ${snapshot.data[index]}');
                           return DisplayCart(
                             cart: Cart(
-                                product_photo: productItems[index].product_photo,
-                                product_title: productItems[index].product_title,
-                                product_price: productItems[index].product_price,
+                                productPhoto: productItems[index].product_photo,
+                                productTitle: productItems[index].product_title,
+                                productPrice: productItems[index].product_price,
                                 delivery: productItems[index].delivery),
                             onTap: () {
                               addToCart(index);

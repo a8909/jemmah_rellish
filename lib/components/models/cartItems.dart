@@ -5,34 +5,34 @@ class CartItems {
   final Localstorage _storage = Localstorage();
   List<Cart> categories = [
     Cart(
-        product_photo: "assets/image/HE-1114.png",
-        product_title: 'Shawamar',
-        product_price: "2000",
+        productPhoto: "assets/image/HE-1114.png",
+        productTitle: 'Shawamar',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
     Cart(
-        product_photo: "assets/image/zobo.jpeg",
-        product_title: 'Zobo',
-        product_price: "2000",
+        productPhoto: "assets/image/zobo.jpeg",
+        productTitle: 'Zobo',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
     Cart(
-        product_photo: "assets/image/shaw.jpeg",
-        product_title: 'Smotthie',
-        product_price: "2000",
+        productPhoto: "assets/image/shaw.jpeg",
+        productTitle: 'Smotthie',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
     Cart(
-        product_photo: "assets/image/smth.jpeg",
-        product_title: 'Cocktail',
-        product_price: "2000",
+        productPhoto: "assets/image/smth.jpeg",
+        productTitle: 'Cocktail',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
     Cart(
-        product_photo: "assets/image/shaw2.jpeg",
-        product_title: 'Shawamar',
-        product_price: "2000",
+        productPhoto: "assets/image/shaw2.jpeg",
+        productTitle: 'Shawamar',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
     Cart(
-        product_photo: "assets/image/shaw.jpeg",
-        product_title: 'Shawamar',
-        product_price: "2000",
+        productPhoto: "assets/image/shaw.jpeg",
+        productTitle: 'Shawamar',
+        productPrice: "2000",
         delivery: 'Taste nice and better'),
   ];
 

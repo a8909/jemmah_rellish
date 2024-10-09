@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/songsModel.dart';
@@ -34,15 +36,33 @@ class _LoginState extends State<Login> {
     });
   }
 
+  late Timer timer;
+
   void googleRequest() {
     // _gAuth.signInwithGoogle();
     //if gAuth is available authticate with google else show coming soon
-    
+  }
+  errorDisplay() {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (timer) {
+        Text(
+          errorMessage,
+          style: const TextStyle(color: Colors.red),
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   @override
@@ -150,6 +170,7 @@ class _LoginState extends State<Login> {
                           services.signUP(body).catchError(
                             (err) {
                               print('errormessage is :$err');
+                              return err;
                             },
                             test: (error) {
                               return throw Exception(error);
@@ -222,10 +243,7 @@ class _LoginState extends State<Login> {
                 ),
                 errorMessage.toString().isEmpty
                     ? const SizedBox.shrink()
-                    : Text(
-                        errorMessage,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                    : errorDisplay(),
 
                 // errorMessage should be displayed here
                 Align(

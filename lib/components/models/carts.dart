@@ -1,24 +1,24 @@
 class Cart {
-  final String product_photo;
-  final String product_title;
-  final String product_price;
+  final String productPhoto;
+  final String productTitle;
+  final String productPrice;
   final String delivery;
   Cart(
-      {required this.product_photo,
-      required this.product_title,
-      required this.product_price,
+      {required this.productPhoto,
+      required this.productTitle,
+      required this.productPrice,
       required this.delivery});
       // this convert it to an object
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-      product_photo: json['product_photo'],
-      product_title: json['product_title'],
-      product_price: json['product_price'],
+      productPhoto: json['productPhoto'],
+      productTitle: json['productTitle'],
+      productPrice: json['productPrice'],
       delivery: json['delivery']);
   Map<String, dynamic> toJson() {
     return {
-      'product_photo': product_photo,
-      'product_title': product_title,
-      'product_price': product_price,
+      'productPhoto': productPhoto,
+      'productTitle': productTitle,
+      'productPrice': productPrice,
       'delivery': delivery
     };
   }

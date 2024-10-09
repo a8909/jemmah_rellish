@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/localStorage.dart';
 
+// ignore: must_be_immutable
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
   bool isLogOut = false;
@@ -14,6 +15,9 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: const BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(8), bottomRight: Radius.circular(8))),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -22,11 +26,11 @@ class CustomDrawer extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: IconButton(
+              child: TextButton(
                 onPressed: () {
                   Scaffold.of(context).closeDrawer(); // Close the drawer
                 },
-                icon: const Icon(Icons.cancel_rounded),
+                child: const Text('Dismiss'),
               ),
             ),
             const SizedBox(height: 100),
@@ -55,7 +59,7 @@ class CustomDrawer extends StatelessWidget {
               // Perform logout actions here
               isLogOut = true;
               if (isLogOut) {
-                await _storage.remove('auth').whenComplete(
+                await _storage.logOut('auth').whenComplete(
                   () {
                     Navigator.of(context).pushNamed('/Login');
                     isLogOut = false;

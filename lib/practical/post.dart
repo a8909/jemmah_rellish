@@ -87,6 +87,7 @@ class _PostsState extends State<Posts> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
+              CustomDrawer();
               Scaffold.of(context).openDrawer();
             },
             icon: const Icon(Icons.menu)),

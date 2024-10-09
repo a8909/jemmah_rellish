@@ -12,9 +12,16 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   List<String> gender = ['Male', 'Female'];
-  bool state = false;
   String dropdownValue = 'Male';
   final songTheme = SongModel();
+  final Localstorage _storage = Localstorage();
+
+  void onLogOut() async {
+    await _storage.logOut('auth');
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      return const Login();
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +64,8 @@ class _ProfileState extends State<Profile> {
                               Align(
                                 alignment: Alignment.center,
                                 child: OutlinedButton(
-                                    onPressed: () async {
-                                      state = true;
-                                      await Localstorage().remove('auth');
-                                      Navigator.pushReplacement(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return const Login();
-                                      }));
+                                    onPressed: () {
+                                      onLogOut();
                                     },
                                     child: const Text('Log out')),
                               )
@@ -73,12 +75,12 @@ class _ProfileState extends State<Profile> {
                   ),
                   PopupMenuItem(
                     value: Option.mode,
-                    child: const Text('Mode'),
+                    child: Text(songTheme.lightMode ? 'LightMode' : 'DarkMode'),
                     onTap: () {
                       setState(() {
-                        final mode = songTheme.lightMode = !songTheme.lightMode;
+                        bool mode = songTheme.lightMode = !songTheme.lightMode;
                         songTheme.themes = mode;
-                        print(songTheme.lightMode);
+                        print('theme : ${songTheme.lightMode}');
                       });
                     },
                   ),

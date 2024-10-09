@@ -2,10 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
 import 'package:jemmah_rellish/components/models/playSong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SongModel {
-  Localstorage storage = Localstorage();
+  final Localstorage _storage = Localstorage();
   List<Songs> songs = [
     Songs(
         songName: 'Stronger',
@@ -36,21 +35,15 @@ class SongModel {
 
   bool lightMode = false;
 
-  set themes(bool newTheme) {
+  set themes(bool newTheme)  {
     lightMode = newTheme;
+    savedModeState(lightMode);
+    
   }
-
-  currentMode(bool newmode) async {
-    final SharedPreferences getTheme = await SharedPreferences.getInstance();
-
-    lightMode = newmode;
-    bool cu = lightMode;
-    print(cu);
-    final themes = await getTheme.setBool('mode', cu);
-    print("themes: $themes");
+  // saving the state of the application theme..
+  void savedModeState(value) async {
+    await _storage.modeSwitching('switchKey', value);
   }
-
-  get thm => lightMode;
 
   ThemeData light = ThemeData(
       brightness: Brightness.light,

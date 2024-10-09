@@ -12,7 +12,7 @@ class Localstorage {
     prefs.getString(key) ?? 'users login are empty';
   }
 
-  Future remove(String key) async {
+  Future logOut(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
   }
@@ -33,14 +33,14 @@ class Localstorage {
     prefs.getString(key);
   }
 
-  Future switching(String key, bool value) async {
+  Future modeSwitching(String key, bool value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(key, value);
   }
 
-  getSwitch(String key) async {
+  getModeSwitch(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getBool(key);
+    return prefs.getBool(key);
   }
 
   saveTooltip({required String key, required int value}) async {

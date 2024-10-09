@@ -34,12 +34,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final songTheme = SongModel();
+  final Localstorage _storage = Localstorage();
+  late bool appTheme = false;
 
   // This widget is the root of your application.
   @override
   void initState() {
     super.initState();
     _getusrPref();
+    // _getAppTheme();
   }
 
   _getusrPref() async {
@@ -48,10 +51,15 @@ class _MyAppState extends State<MyApp> {
     print('value: $value');
   }
 
+  // _getAppTheme() async {
+  //   appTheme = await _storage.getModeSwitch('switchKey') ?? false;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: songTheme.thm ? songTheme.darkMode : songTheme.light,
+      //application receives it theme based on the boolean appTheme, if its true it evaluated to be darkTheme else light theme
+      theme: appTheme ? songTheme.darkMode : songTheme.light,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
