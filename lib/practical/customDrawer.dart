@@ -66,7 +66,7 @@ class CustomDrawer extends StatelessWidget {
                   },
                 );
               }
-              ; // Example route
+// Example route
             }, Icons.logout_rounded, 'Logout'),
           ],
         ),

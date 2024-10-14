@@ -63,6 +63,7 @@ class _PostsState extends State<Posts> {
 
   _getReviews() async {
     List<String>? listUserPost = await _storage.getPost('pst');
+    print('listUserPost is : $listUserPost');
     if (listUserPost != null) {
       setState(() {
         postArray.userPost = listUserPost!
@@ -77,7 +78,7 @@ class _PostsState extends State<Posts> {
   @override
   void initState() {
     super.initState();
-    _getReviews();
+    // _getReviews();
     // _scroller.onScroll();
   }
 
@@ -232,7 +233,7 @@ class _PostsState extends State<Posts> {
                   // controller: _scroller.onScroll(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return AllPost(usp: postArray.userPost[index]);
+                    return AllPost(usp: postArray.singlePost[index]);
                   },
                   separatorBuilder: (context, index) => const SizedBox(
                         height: 8,

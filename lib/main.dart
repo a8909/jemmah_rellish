@@ -36,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   final songTheme = SongModel();
   final Localstorage _storage = Localstorage();
   late bool appTheme = false;
+  final InternetConnection _connectivityState = InternetConnection();
 
   // This widget is the root of your application.
   @override
@@ -50,6 +51,13 @@ class _MyAppState extends State<MyApp> {
     final value = getusr.getString('auth') ?? 'auth is empty';
     print('value: $value');
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _connectivityState.subscription.cancel();
+  }
+  
 
   // _getAppTheme() async {
   //   appTheme = await _storage.getModeSwitch('switchKey') ?? false;
@@ -167,8 +175,8 @@ class _JehmaState extends State<Jehma> {
   }
 
   getpref() async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    var auths = _pref.getString('auth');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var auths = pref.getString('auth');
     print('auths: $auths');
   }
 

@@ -83,16 +83,16 @@ class _CartListState extends State<CartList> {
                                     Radius.circular(12))),
                             child: ListTile(
                               leading: Image.asset(
-                                singlecart.productPhoto,
+                                singlecart.image,
                                 height: 50,
                                 width: 50,
                               ),
                               title: Text(
-                                singlecart.productTitle,
+                                singlecart.title,
                                 style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text(singlecart.productPrice),
+                              subtitle: Text(singlecart.price),
                             ),
                           );
                         },

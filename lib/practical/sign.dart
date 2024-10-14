@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Signup extends StatefulWidget {
-  Signup({super.key});
+  const Signup({super.key});
 
   @override
   State<Signup> createState() => _SignupState();
@@ -62,9 +62,9 @@ class _SignupState extends State<Signup> {
                 const Text('Male'),
                 Radio(
                   value: Gender.male,
-                  fillColor: MaterialStateProperty.resolveWith(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
+                  fillColor: WidgetStateProperty.resolveWith(
+                      (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.disabled)) {
                       return Colors.black.withOpacity(.32);
                     } else {
                       return Colors.black;
@@ -81,9 +81,9 @@ class _SignupState extends State<Signup> {
                 const Text('Female'),
                 Radio(
                   value: Gender.female,
-                  fillColor: MaterialStateProperty.resolveWith(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
+                  fillColor: WidgetStateProperty.resolveWith(
+                      (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.disabled)) {
                       return Colors.black.withOpacity(.32);
                     } else {
                       return Colors.black;

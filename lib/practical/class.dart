@@ -6,7 +6,7 @@ class Items extends StatefulWidget {
   final String category;
   final String price;
 
-  Items({required this.image, required this.category, required this.price});
+  const Items({super.key, required this.image, required this.category, required this.price});
 
   @override
   State<Items> createState() => _ItemsState();

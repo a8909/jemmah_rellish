@@ -39,7 +39,7 @@ class _CartloguesState extends State<Cartlogues> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             height: 350,
             width: double.infinity,
             child: Column(
@@ -69,14 +69,14 @@ class _CartloguesState extends State<Cartlogues> {
       isCartAdded = true;
       cartCount = cartCount + 1;
       crt.currentShop = index;
-      var addItem = crt.categories[index];
+      var addItem = items[index];
       final cart = Cart(
-          productPhoto: addItem.productPhoto,
-          productTitle: addItem.productTitle,
-          productPrice: addItem.productPrice,
-          delivery: addItem.delivery);
+          image: addItem.image,
+          title: addItem.title,
+          price: addItem.price,
+          deliveryStatus: addItem.deliveryStatus);
       crt.onAdd(cart);
-      showModal(addItem.productPhoto, addItem.productTitle);
+      showModal(addItem.image, addItem.title);
     });
     List<String> product =
         crt.shopCart.map((p) => jsonEncode(p.toJson())).toList();
@@ -104,14 +104,15 @@ class _CartloguesState extends State<Cartlogues> {
   void initState() {
     super.initState();
     _updateProducts();
-    // items = crt.categories;
     _updatePagination();
     _onLoadtoolTip();
   }
 
   void _updateProducts() async {
-    final products = await _endPoint.getProducts();
-    items = products;
+    final List products = await _endPoint.getProducts();
+    setState(() {
+      items = products;
+    });
   }
 
   void onPrevious() {
@@ -142,11 +143,11 @@ class _CartloguesState extends State<Cartlogues> {
     setState(() {
       if (search.isEmpty) {
         // items = crt.categories;
-        items = populatedProduct;
+        populatedProduct = items;
       } else {
-        items = populatedProduct.where((q) {
+        populatedProduct = items.where((q) {
           final queryList =
-              q.product_title.toLowerCase().contains(search.toLowerCase());
+              q['product_title'] || q['product_price'].toLowerCase().contains(search.toLowerCase());
           return queryList;
         }).toList();
       }
@@ -227,35 +228,34 @@ class _CartloguesState extends State<Cartlogues> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
-            // _searchController.text.isEmpty
-            //     ? const AnimatedOpacity(
-            //         opacity: 0.5,
-            //         curve: Curves.easeInOut,
-            //         duration: Duration(seconds: 2),
-            //         child: Text(
-            //           'Enter a vaild search entry',
-            //         ))
-            //     :
+            _searchController.text.isEmpty
+                ? const AnimatedOpacity(
+                    opacity: 0.5,
+                    curve: Curves.easeInOut,
+                    duration: Duration(seconds: 2),
+                    child: Text(
+                      'Enter a vaild search entry',
+                    ))
+                :
             Expanded(
               child: FutureBuilder(
                   future: _endPoint.getProducts(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return GridView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: snapshot.data!.length,
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
-                          final productItems = snapshot.data;
-                          print('product index: ${snapshot.data[index]}');
+                          final productItems = snapshot.data[index];
                           return DisplayCart(
                             cart: Cart(
-                                productPhoto: productItems[index].product_photo,
-                                productTitle: productItems[index].product_title,
-                                productPrice: productItems[index].product_price,
-                                delivery: productItems[index].delivery),
+                                image: productItems['product_photo'],
+                                title: productItems['product_title'],
+                                price: productItems['product_price'],
+                                deliveryStatus: productItems['delivery']),
                             onTap: () {
                               addToCart(index);
                             },
