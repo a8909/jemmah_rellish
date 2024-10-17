@@ -86,12 +86,13 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+        leading: Builder(builder: (context) {
+          return IconButton(
             onPressed: () {
-              CustomDrawer();
               Scaffold.of(context).openDrawer();
             },
-            icon: const Icon(Icons.menu)),
+            icon: const Icon(Icons.menu));
+        },),
         title: const Center(
           child: Text(
             'P o s t s',

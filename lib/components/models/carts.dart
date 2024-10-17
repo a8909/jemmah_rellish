@@ -1,15 +1,14 @@
 class Cart {
-  final String image;
+  final String? image;
   final String title;
-  final String price;
+  final double price;
   final String deliveryStatus;
   Cart(
-      {
-        required this.image,
+      {required this.image,
       required this.title,
       required this.price,
       required this.deliveryStatus});
-      // this convert it to an object
+  // this convert it to an object
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
       image: json['image'],
       title: json['title'],

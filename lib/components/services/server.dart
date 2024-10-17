@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:jemmah_rellish/components/models/carts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceWorker {
@@ -60,21 +59,27 @@ class ServiceWorker {
   }
 
   Future<dynamic> getProducts() async {
-    var headers = {
-      'x-apihub-key': 'RKw9zJhderwcdVUwL19zi7FvntZ4YupfwKqyehFZlnLbKMWRdo',
-      'x-apihub-host': 'Real-Time-Amazon-Data.allthingsdev.co',
-      'x-apihub-endpoint': '2bdcdbad-e6a5-4d34-9d32-d5376691a986'
-    };
+    // var headers = {
+    //   'x-apihub-key': 'RKw9zJhderwcdVUwL19zi7FvntZ4YupfwKqyehFZlnLbKMWRdo',
+    //   'x-apihub-host': 'Real-Time-Amazon-Data.allthingsdev.co',
+    //   'x-apihub-endpoint': '2bdcdbad-e6a5-4d34-9d32-d5376691a986'
+    // };
 
-    const url =
-        'https://Real-Time-Amazon-Data.proxy-production.allthingsdev.co/v2/products-by-category?category_id=2478868012&page=1&country=US&sort_by=RELEVANCE&product_condition=ALL&min_price=105&max_price=110&brand=null';
-    final response = await http.get(Uri.parse(url), headers: headers);
-
-    if (response.statusCode == 200) {
-      var resData = jsonDecode(response.body)['data']['products'];
-      return resData;
-    } else {
-      return throw Exception('failed to load post');
+    // const url =
+    //     'https://Real-Time-Amazon-Data.proxy-production.allthingsdev.co/v2/products-by-category?category_id=2478868012&page=1&country=US&sort_by=RELEVANCE&product_condition=ALL&min_price=105&max_price=110&brand=null';
+    const url = "https://fakestoreapi.com/products";
+    final response = await http.get(
+      Uri.parse(url),
+    );
+    try {
+      if (response.statusCode == 200) {
+        var resData = jsonDecode(response.body);
+        return resData;
+      } else {
+        return throw Exception('failed to load post');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

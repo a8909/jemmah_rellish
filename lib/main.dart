@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
         scr: (context) => const Screens(),
         forgetpswrd: (context) => Forgot(),
         notifi: (context) => const Not(),
-        sign: (context) => Signup(),
+        sign: (context) => const Signup(),
         '/carts': (context) => const CartList(),
         playList: (context) => const Song(),
         profile: (context) => const Profile(),

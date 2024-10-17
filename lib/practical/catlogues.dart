@@ -46,7 +46,12 @@ class _CartloguesState extends State<Cartlogues> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(productImage),
+                Image.network(
+                  productImage,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
                 Text('$productName has been successfully added to cart'),
                 const SizedBox(height: 5),
                 MaterialButton(
@@ -71,12 +76,12 @@ class _CartloguesState extends State<Cartlogues> {
       crt.currentShop = index;
       var addItem = items[index];
       final cart = Cart(
-          image: addItem.image,
-          title: addItem.title,
-          price: addItem.price,
-          deliveryStatus: addItem.deliveryStatus);
+          image: addItem['image'],
+          title: addItem['title'],
+          price: addItem['price'],
+          deliveryStatus: addItem['category']);
       crt.onAdd(cart);
-      showModal(addItem.image, addItem.title);
+      showModal(addItem['image'], addItem['title']);
     });
     List<String> product =
         crt.shopCart.map((p) => jsonEncode(p.toJson())).toList();
@@ -143,11 +148,12 @@ class _CartloguesState extends State<Cartlogues> {
     setState(() {
       if (search.isEmpty) {
         // items = crt.categories;
-        populatedProduct = items;
+            populatedProduct = items;
       } else {
         populatedProduct = items.where((q) {
           final queryList =
-              q['product_title'] || q['product_price'].toLowerCase().contains(search.toLowerCase());
+              q['category'].toLowerCase().contains(search.toLowerCase()) ||
+                  q['price'].toString().contains(search);
           return queryList;
         }).toList();
       }
@@ -228,7 +234,7 @@ class _CartloguesState extends State<Cartlogues> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
-            _searchController.text.isEmpty
+            _serchController.value.text.isEmpty
                 ? const AnimatedOpacity(
                     opacity: 0.5,
                     curve: Curves.easeInOut,
@@ -243,19 +249,24 @@ class _CartloguesState extends State<Cartlogues> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return GridView.builder(
-                        itemCount: snapshot.data!.length,
+                        itemCount: populatedProduct.isEmpty
+                            ? snapshot.data!.length
+                            : populatedProduct.length,
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
-                          final productItems = snapshot.data[index];
+                          final productItems = populatedProduct.isEmpty
+                              ? snapshot.data[index]
+                              : populatedProduct[index];
+
                           return DisplayCart(
                             cart: Cart(
-                                image: productItems['product_photo'],
-                                title: productItems['product_title'],
-                                price: productItems['product_price'],
-                                deliveryStatus: productItems['delivery']),
+                                image: productItems['image'],
+                                title: productItems['title'],
+                                price: productItems['price'],
+                                deliveryStatus: productItems['category']),
                             onTap: () {
                               addToCart(index);
                             },

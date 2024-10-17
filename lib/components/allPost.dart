@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jemmah_rellish/components/models/colors.dart';
 import 'package:jemmah_rellish/components/models/userPost.dart';
 
 class AllPost extends StatelessWidget {
   final UsrPost usp;
-  const AllPost({super.key, required this.usp});
+   AllPost({super.key, required this.usp});
+
+  final GlobalColors _colors = GlobalColors();
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +14,7 @@ class AllPost extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.all(10),
-        color: Colors.grey.shade200.withOpacity(1),
+        color: _colors.grey200,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

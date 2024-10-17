@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/localStorage.dart';
 
 // ignore: must_be_immutable
@@ -15,11 +14,11 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      shape: const BeveledRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topRight: Radius.circular(8), bottomRight: Radius.circular(8))),
+              topRight: Radius.circular(12), bottomRight: Radius.circular(12))),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,25 +33,26 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 100),
+            const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Welcome back Oxide!')),
+            const SizedBox(height: 10),
             drawerTabs(() {
               // Handle Profile tap
               onPageNavigation(context, '/Profile'); // Example route
-            }, Icons.person_3_rounded, 'Profile'),
-            const SizedBox(height: 30),
+            }, Icons.person_3_rounded, 'Profile', false),
             drawerTabs(() {
               // Handle Playlist tap
-              onPageNavigation(context, '/Playlist'); // Example route
-            }, Icons.headset_rounded, 'Playlist'),
-            const SizedBox(height: 10),
+              onPageNavigation(context, '/Playlists'); // Example route
+            }, Icons.headset_rounded, 'Playlist', true),
             drawerTabs(() {
               // Handle Map tap
               onPageNavigation(context, '/Map'); // Example route
-            }, Icons.location_on_rounded, 'Map'),
-            const SizedBox(height: 10),
+            }, Icons.location_on_rounded, 'Map', true),
             drawerTabs(() {
               // Handle Support Agent tap
               onPageNavigation(context, '/Support'); // Example route
-            }, Icons.support_agent_rounded, 'Support Agent'),
+            }, Icons.support_agent_rounded, 'Support Agent', true),
             const Spacer(),
             drawerTabs(() async {
               // Handle Logout tap
@@ -66,8 +66,8 @@ class CustomDrawer extends StatelessWidget {
                   },
                 );
               }
-// Example route
-            }, Icons.logout_rounded, 'Logout'),
+              // Example route
+            }, Icons.logout_rounded, 'Logout', true),
           ],
         ),
       ),
@@ -75,14 +75,19 @@ class CustomDrawer extends StatelessWidget {
   }
 }
 
-Widget drawerTabs(Function()? onTap, IconData icon, String tabName) {
+Widget drawerTabs(Function()? onTap, IconData icon, String tabName, bool? key) {
   return GestureDetector(
     onTap: onTap,
-    child: Row(
+    child: Column(
       children: [
-        Icon(icon),
-        const SizedBox(width: 10),
-        Text(tabName),
+        Row(
+          children: [
+            Icon(icon),
+            const SizedBox(width: 10),
+            Text(tabName),
+          ],
+        ),
+        SizedBox(key: GlobalObjectKey(key!), height: key ? 10 : 30)
       ],
     ),
   );
