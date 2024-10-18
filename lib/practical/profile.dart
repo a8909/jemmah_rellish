@@ -57,7 +57,6 @@ class _ProfileState extends State<Profile> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text(''),
                             content: const Text(
                                 "Are you sure you want to log out ?"),
                             actions: [

@@ -33,6 +33,7 @@ class _CartloguesState extends State<Cartlogues> {
   List items = [];
   int pageCount = 0;
   List populatedProduct = [];
+  int? savedCount = 0;
 
   void showModal(String productImage, String productName) {
     showDialog(
@@ -95,10 +96,19 @@ class _CartloguesState extends State<Cartlogues> {
   }
 
   _onLoadtoolTip() async {
-    int? savedCount = await storage.savedTooltips('tipsKey');
+    savedCount = await storage.savedTooltips('tipsKey');
     setState(() {
       cartCount = savedCount ?? 0;
     });
+  }
+
+  void _onRefresh() {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        items.shuffle();
+      },
+    );
   }
 
   void showCart() {
@@ -148,7 +158,7 @@ class _CartloguesState extends State<Cartlogues> {
     setState(() {
       if (search.isEmpty) {
         // items = crt.categories;
-            populatedProduct = items;
+        populatedProduct = items;
       } else {
         populatedProduct = items.where((q) {
           final queryList =
@@ -186,7 +196,8 @@ class _CartloguesState extends State<Cartlogues> {
                 ),
                 tooltip: _itemcount.toString(),
               ),
-              isCartAdded
+              isCartAdded ||
+                      savedCount.toString().isNotEmpty 
                   ? Positioned(
                       left: 0,
                       top: 0,
@@ -228,59 +239,73 @@ class _CartloguesState extends State<Cartlogues> {
                 onChanged: (value) {
                   onSearch(value);
                 },
-                decoration: const InputDecoration(
-                    hintText: 'Search to filter product',
-                    suffixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
+                decoration:  InputDecoration(
+                    hintText: 'Search to filter product by category or price',
+                    helperStyle:  TextStyle(color: Colors.black.withOpacity(0.5)),
+                    suffixIcon:const  Icon(Icons.search),
+                    border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))))),
             const SizedBox(height: 10),
-            _serchController.value.text.isEmpty
-                ? const AnimatedOpacity(
+            _serchController.text.isEmpty
+                ? Expanded(
+                    child: FutureBuilder(
+                        future: _endPoint.getProducts(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.builder(
+                              itemCount: populatedProduct.isEmpty
+                                  ? snapshot.data!.length
+                                  : populatedProduct.length,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                                final productItems = populatedProduct.isEmpty
+                                    ? snapshot.data[index]
+                                    : populatedProduct[index];
+
+                                return DisplayCart(
+                                  cart: Cart(
+                                      image: productItems['image'],
+                                      title: productItems['title'],
+                                      price: productItems['price'],
+                                      deliveryStatus: productItems['category']),
+                                  onTap: () {
+                                    addToCart(index);
+                                  },
+                                );
+                              },
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text(
+                                'snapshot error is : ${snapshot.error}');
+                          } else {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        }),
+                  )
+                : AnimatedOpacity(
                     opacity: 0.5,
                     curve: Curves.easeInOut,
-                    duration: Duration(seconds: 2),
-                    child: Text(
-                      'Enter a vaild search entry',
-                    ))
-                :
-            Expanded(
-              child: FutureBuilder(
-                  future: _endPoint.getProducts(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return GridView.builder(
-                        itemCount: populatedProduct.isEmpty
-                            ? snapshot.data!.length
-                            : populatedProduct.length,
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2),
-                        itemBuilder: (context, index) {
-                          final productItems = populatedProduct.isEmpty
-                              ? snapshot.data[index]
-                              : populatedProduct[index];
-
-                          return DisplayCart(
-                            cart: Cart(
-                                image: productItems['image'],
-                                title: productItems['title'],
-                                price: productItems['price'],
-                                deliveryStatus: productItems['category']),
-                            onTap: () {
-                              addToCart(index);
-                            },
-                          );
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('snapshot error is : ${snapshot.error}');
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  }),
-            ),
-            items.isEmpty
+                    duration: const Duration(seconds: 2),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/image/invalid_search.png',
+                            height: 400,
+                            width: 400
+                          ),
+                          const Text(
+                            'Enter a vaild search entry',
+                          ),
+                        ],
+                      ),
+                    )),
+            items.isEmpty || _serchController.text.isEmpty
                 ? const SizedBox.shrink()
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

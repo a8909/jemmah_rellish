@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/localStorage.dart';
+import 'login.dart';
 
 // ignore: must_be_immutable
 class CustomDrawer extends StatelessWidget {
@@ -9,6 +10,44 @@ class CustomDrawer extends StatelessWidget {
 
   void onPageNavigation(BuildContext context, String path) {
     Navigator.of(context).pushNamed(path);
+  }
+
+  void loginPage(BuildContext context) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      return const Login();
+    }));
+  }
+
+  void _logoutAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text("Are you sure you want to log out ?"),
+          actions: [
+            Align(
+              alignment: Alignment.center,
+              child: OutlinedButton(
+                  onPressed: () async {
+                    await _storage.logOut('auth').whenComplete(
+                      () {
+                        Future.delayed(const Duration(seconds: 2), () {
+                          const snackBar = SnackBar(
+                              content: Text(
+                                  'Your account was successfully log out'));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.pop(context);
+                          loginPage(context);
+                        });
+                      },
+                    );
+                  },
+                  child: const Text('Log out')),
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -43,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
             }, Icons.person_3_rounded, 'Profile', false),
             drawerTabs(() {
               // Handle Playlist tap
-              onPageNavigation(context, '/Playlists'); // Example route
+              onPageNavigation(context, '/Playlist'); // Example route
             }, Icons.headset_rounded, 'Playlist', true),
             drawerTabs(() {
               // Handle Map tap
@@ -57,16 +96,7 @@ class CustomDrawer extends StatelessWidget {
             drawerTabs(() async {
               // Handle Logout tap
               // Perform logout actions here
-              isLogOut = true;
-              if (isLogOut) {
-                await _storage.logOut('auth').whenComplete(
-                  () {
-                    Navigator.of(context).pushNamed('/Login');
-                    isLogOut = false;
-                  },
-                );
-              }
-              // Example route
+              _logoutAlert(context);
             }, Icons.logout_rounded, 'Logout', true),
           ],
         ),

@@ -36,7 +36,6 @@ class _MyAppState extends State<MyApp> {
   final songTheme = SongModel();
   final Localstorage _storage = Localstorage();
   late bool appTheme = false;
-  final InternetConnection _connectivityState = InternetConnection();
 
   // This widget is the root of your application.
   @override
@@ -55,9 +54,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    _connectivityState.subscription.cancel();
+    InternetConnection().subscription.cancel();
   }
-  
 
   // _getAppTheme() async {
   //   appTheme = await _storage.getModeSwitch('switchKey') ?? false;
