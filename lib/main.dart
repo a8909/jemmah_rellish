@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:jemmah_rellish/components/localStorage.dart';
@@ -20,9 +21,9 @@ import 'practical/cartList.dart';
 import 'practical/globalstring.dart';
 import 'practical/class.dart';
 
-void main() async {
+void main() async{
   runApp(const MyApp());
-  await InternetConnection().checkConnection();
+   await InternetConnection().checkConnection();
 }
 
 class MyApp extends StatefulWidget {
@@ -36,20 +37,16 @@ class _MyAppState extends State<MyApp> {
   final songTheme = SongModel();
   final Localstorage _storage = Localstorage();
   late bool appTheme = false;
+  final ServiceWorker _service = ServiceWorker();
 
   // This widget is the root of your application.
   @override
   void initState() {
     super.initState();
-    _getusrPref();
     // _getAppTheme();
   }
 
-  _getusrPref() async {
-    final SharedPreferences getusr = await SharedPreferences.getInstance();
-    final value = getusr.getString('auth') ?? 'auth is empty';
-    print('value: $value');
-  }
+  
 
   @override
   void dispose() {
@@ -70,6 +67,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => const Splash(),
+        // _service.singleToken() ? const Login() : const Splash(),
         login: (context) => const Login(),
         jem: (context) => const Jehma(),
         scr: (context) => const Screens(),
@@ -167,16 +165,10 @@ class _JehmaState extends State<Jehma> {
   void initState() {
     super.initState();
     pageController = PageController();
-    getpref();
     _startSlider();
     // _scroller.onScroll();
   }
 
-  getpref() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var auths = pref.getString('auth');
-    print('auths: $auths');
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceWorker {
   String err = '';
+
+  String token = '';
+
+
+  get singleToken => token;
   Future<Map<String, dynamic>> signUP(body) async {
     var endPoint =
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
@@ -12,7 +17,7 @@ class ServiceWorker {
         body: jsonEncode(body),
         headers: {
           "Content-type": "application/json",
-          "Accept": "application/json"
+          "Accept": "application/json",
         });
     print('body:$body');
 
@@ -28,13 +33,18 @@ class ServiceWorker {
 
   Future<Map<String, dynamic>> userLogin(body) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var endPoint =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
-    var response = await http.post(Uri.parse(endPoint), body: jsonEncode(body));
+    var endPoint = 'https://dummyjson.com/auth/login';
+        // 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDx8h2UbViCKOTIJGNzFefatv_GlwrawrE';
+    var response = await http.post(Uri.parse(endPoint), body: jsonEncode(body), 
+    headers: {
+      "Content-type": "application/json",
+      'Authorization': 'Bearer ${body['accessToken']}'
+      });
+      
+    
     var data = jsonDecode(response.body);
-
     try {
-      pref.setString('auth', data['idToken']);
+      pref.setString('auth', data['accessToken']);
       return response.statusCode == 200 ? data : "An error occurred";
     } catch (e) {
       return throw Exception(e); //onHandleError(e);
@@ -82,4 +92,18 @@ class ServiceWorker {
       throw Exception(e);
     }
   }
+
+  Future<dynamic> fetchPosts() async{
+    const url = 'https://dummyjson.com/posts';
+    final response = await http.get(Uri.parse((url)));
+    try{
+      if(response.statusCode == 200){
+        print(jsonDecode(response.body));
+      }
+    }catch(e){
+      throw Exception(e);
+    }
+  }
+
+ 
 }

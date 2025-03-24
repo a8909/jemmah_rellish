@@ -63,22 +63,24 @@ class _PostsState extends State<Posts> {
 
   _getReviews() async {
     List<String>? listUserPost = await _storage.getPost('pst');
-    print('listUserPost is : $listUserPost');
-    if (listUserPost != null) {
+    if (postArray.userPost.isNotEmpty) {
+      if(listUserPost!.isNotEmpty){
+        postArray.userPost = listUserPost.cast<UsrPost>();
+      }
       setState(() {
-        postArray.userPost = listUserPost!
-            .map((up) => UsrPost.fromJson(jsonDecode(up)))
+        postArray.userPost.map((up) => UsrPost.fromJson(jsonDecode(up as String)))
             .toList();
       });
       return postArray.userPost;
+    } else {
+      return listUserPost = [];
     }
-    return listUserPost = [];
   }
 
   @override
   void initState() {
     super.initState();
-    // _getReviews();
+    _getReviews();
     // _scroller.onScroll();
   }
 
@@ -86,13 +88,15 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(builder: (context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: const Icon(Icons.menu));
-        },),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(Icons.menu));
+          },
+        ),
         title: const Center(
           child: Text(
             'P o s t s',
@@ -234,7 +238,7 @@ class _PostsState extends State<Posts> {
                   // controller: _scroller.onScroll(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return AllPost(usp: postArray.singlePost[index]);
+                    return AllPost(usp: postArray.userPost[index]);
                   },
                   separatorBuilder: (context, index) => const SizedBox(
                         height: 8,

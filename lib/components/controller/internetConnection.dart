@@ -10,27 +10,22 @@ class InternetConnection {
   bool isconnected = false;
   set connectionState(bool param) {
     isconnected = param;
-    _updateConnectionStatus;
   }
 
   checkConnection() async {
-    final ConnectivityResult connectionResult = (await _connectivity.checkConnectivity()) as ConnectivityResult;
-    _updateConnectionStatus(connectionResult);
-    print('connectionState: $connectionResult');
-    subscription =
-        _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> result){
-          _updateConnectionStatus(result as ConnectivityResult);
-        });
-  }
-
-  void _updateConnectionStatus(ConnectivityResult result) {
-    if (result == ConnectivityResult.mobile ||
-        result == ConnectivityResult.wifi) {
-      connectionState = true;
-      print('true');
+    final result = await _connectivity.checkConnectivity();
+    print('result : $result');
+    if (result == [ConnectivityResult.wifi]) {
+      connectionState = false;
+      print('wifi');
     }
-    connectionState = false;
-    print('false');
-    const NetworkError();
+    subscription = _connectivity.onConnectivityChanged.listen((result) {
+      print('connetion is reached');
+      if (result == ConnectivityResult.none) {
+        print('eventState : $result');
+        connectionState = false;
+        const NetworkError();
+      }
+    });
   }
 }

@@ -196,7 +196,7 @@ class _CartloguesState extends State<Cartlogues> {
                 ),
                 tooltip: _itemcount.toString(),
               ),
-              isCartAdded ||
+              isCartAdded &&
                       savedCount.toString().isNotEmpty 
                   ? Positioned(
                       left: 0,
@@ -296,8 +296,8 @@ class _CartloguesState extends State<Cartlogues> {
                         children: [
                           Image.asset(
                             'assets/image/invalid_search.png',
-                            height: 400,
-                            width: 400
+                            height: 300,
+                            width: 300
                           ),
                           const Text(
                             'Enter a vaild search entry',
@@ -305,7 +305,7 @@ class _CartloguesState extends State<Cartlogues> {
                         ],
                       ),
                     )),
-            items.isEmpty || _serchController.text.isEmpty
+             _serchController.text.isNotEmpty
                 ? const SizedBox.shrink()
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

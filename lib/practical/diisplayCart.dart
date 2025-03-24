@@ -41,7 +41,7 @@ class _DisplayCartState extends State<DisplayCart> {
               widget.cart.title.length >= 21
                   ? ' ${widget.cart.title.substring(0, 25)}...'
                   : widget.cart.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

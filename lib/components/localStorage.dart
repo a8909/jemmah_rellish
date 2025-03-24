@@ -30,7 +30,7 @@ class Localstorage {
 
   getData(key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getString(key);
+    prefs.getString(key) ?? 'empty';
   }
 
   Future modeSwitching(String key, bool value) async {
